@@ -4,5 +4,5 @@
   "UserId": "sa",
   "Password": "Hc0912.*",
   "IntegratedSecurity": false,
-  "ConnectionTimeout": 3
+  "ConnectionTimeout": 1
 }

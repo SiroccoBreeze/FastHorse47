@@ -40,6 +40,7 @@
             this.btnSqlOptions = new System.Windows.Forms.Button();
             this.btnDbConfig = new System.Windows.Forms.Button();
             this.btnSelectFolder = new System.Windows.Forms.Button();
+            this.btnAbout = new System.Windows.Forms.Button();
             this.lblExecutionStats = new System.Windows.Forms.Label();
             this.lblDbInfo = new System.Windows.Forms.Label();
             this.lblFolderPath = new System.Windows.Forms.Label();
@@ -61,6 +62,7 @@
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colViewDetails = new System.Windows.Forms.DataGridViewButtonColumn();
             this.panelExecutionHeader = new System.Windows.Forms.Panel();
             this.btnClearSearch = new System.Windows.Forms.Button();
             this.chkShowPending = new System.Windows.Forms.CheckBox();
@@ -96,8 +98,9 @@
             // 
             // panelTop
             // 
-            this.panelTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(251)))), ((int)(((byte)(252)))));
+            this.panelTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
             this.panelTop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelTop.Controls.Add(this.btnAbout);
             this.panelTop.Controls.Add(this.btnExecute);
             this.panelTop.Controls.Add(this.btnSqlOptions);
             this.panelTop.Controls.Add(this.btnDbConfig);
@@ -113,10 +116,28 @@
             this.panelTop.Size = new System.Drawing.Size(1925, 107);
             this.panelTop.TabIndex = 0;
             // 
+            // btnAbout
+            // 
+            this.btnAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAbout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
+            this.btnAbout.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAbout.FlatAppearance.BorderSize = 0;
+            this.btnAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAbout.Font = new System.Drawing.Font("Microsoft YaHei UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnAbout.ForeColor = System.Drawing.Color.White;
+            this.btnAbout.Location = new System.Drawing.Point(1864, 12);
+            this.btnAbout.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAbout.Name = "btnAbout";
+            this.btnAbout.Size = new System.Drawing.Size(50, 47);
+            this.btnAbout.TabIndex = 7;
+            this.btnAbout.Text = "ℹ️";
+            this.btnAbout.UseVisualStyleBackColor = false;
+            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
+            // 
             // btnExecute
             // 
             this.btnExecute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExecute.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(211)))), ((int)(((byte)(153)))));
+            this.btnExecute.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(185)))), ((int)(((byte)(129)))));
             this.btnExecute.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnExecute.Enabled = false;
             this.btnExecute.FlatAppearance.BorderSize = 0;
@@ -134,7 +155,7 @@
             // 
             // btnSqlOptions
             // 
-            this.btnSqlOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(126)))), ((int)(((byte)(176)))));
+            this.btnSqlOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
             this.btnSqlOptions.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSqlOptions.FlatAppearance.BorderSize = 0;
             this.btnSqlOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -151,7 +172,7 @@
             // 
             // btnDbConfig
             // 
-            this.btnDbConfig.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(126)))), ((int)(((byte)(176)))));
+            this.btnDbConfig.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
             this.btnDbConfig.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnDbConfig.FlatAppearance.BorderSize = 0;
             this.btnDbConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -168,7 +189,7 @@
             // 
             // btnSelectFolder
             // 
-            this.btnSelectFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(126)))), ((int)(((byte)(176)))));
+            this.btnSelectFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(102)))), ((int)(((byte)(241)))));
             this.btnSelectFolder.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSelectFolder.FlatAppearance.BorderSize = 0;
             this.btnSelectFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -222,6 +243,7 @@
             // 
             // splitContainer1
             // 
+            this.splitContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 107);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
@@ -241,14 +263,14 @@
             // 
             // panelFileList
             // 
-            this.panelFileList.BackColor = System.Drawing.Color.White;
+            this.panelFileList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
             this.panelFileList.Controls.Add(this.dgvFiles);
             this.panelFileList.Controls.Add(this.panelFileListHeader);
             this.panelFileList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelFileList.Location = new System.Drawing.Point(0, 0);
             this.panelFileList.Margin = new System.Windows.Forms.Padding(4);
             this.panelFileList.Name = "panelFileList";
-            this.panelFileList.Padding = new System.Windows.Forms.Padding(1);
+            this.panelFileList.Padding = new System.Windows.Forms.Padding(2);
             this.panelFileList.Size = new System.Drawing.Size(420, 1020);
             this.panelFileList.TabIndex = 0;
             // 
@@ -261,11 +283,11 @@
             this.dgvFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvFiles.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvFiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvFiles.ColumnHeadersHeight = 35;
@@ -276,15 +298,15 @@
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(58)))), ((int)(((byte)(138)))));
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvFiles.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvFiles.EnableHeadersVisualStyles = false;
             this.dgvFiles.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dgvFiles.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-            this.dgvFiles.Location = new System.Drawing.Point(1, 57);
+            this.dgvFiles.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
+            this.dgvFiles.Location = new System.Drawing.Point(2, 58);
             this.dgvFiles.MultiSelect = false;
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.ReadOnly = true;
@@ -292,14 +314,15 @@
             this.dgvFiles.RowHeadersWidth = 72;
             this.dgvFiles.RowTemplate.Height = 30;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(418, 962);
+            this.dgvFiles.Size = new System.Drawing.Size(416, 960);
             this.dgvFiles.TabIndex = 1;
             this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
+            this.dgvFiles.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvFiles_CellPainting);
             // 
             // colFileListName
             // 
             this.colFileListName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colFileListName.DataPropertyName = "FileName";
+            this.colFileListName.DataPropertyName = "DisplayName";
             this.colFileListName.HeaderText = "文件名称";
             this.colFileListName.MinimumWidth = 9;
             this.colFileListName.Name = "colFileListName";
@@ -307,15 +330,15 @@
             // 
             // panelFileListHeader
             // 
-            this.panelFileListHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+            this.panelFileListHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             this.panelFileListHeader.Controls.Add(this.lblFileCount);
             this.panelFileListHeader.Controls.Add(this.lblFileList);
             this.panelFileListHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFileListHeader.Location = new System.Drawing.Point(1, 1);
+            this.panelFileListHeader.Location = new System.Drawing.Point(2, 2);
             this.panelFileListHeader.Margin = new System.Windows.Forms.Padding(4);
             this.panelFileListHeader.Name = "panelFileListHeader";
             this.panelFileListHeader.Padding = new System.Windows.Forms.Padding(21, 14, 21, 14);
-            this.panelFileListHeader.Size = new System.Drawing.Size(418, 56);
+            this.panelFileListHeader.Size = new System.Drawing.Size(416, 56);
             this.panelFileListHeader.TabIndex = 0;
             // 
             // lblFileCount
@@ -347,6 +370,7 @@
             // 
             // splitContainer2
             // 
+            this.splitContainer2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Margin = new System.Windows.Forms.Padding(4);
@@ -367,41 +391,41 @@
             // 
             // panelFileContent
             // 
-            this.panelFileContent.BackColor = System.Drawing.Color.White;
+            this.panelFileContent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
             this.panelFileContent.Controls.Add(this.txtFileContent);
             this.panelFileContent.Controls.Add(this.panelFileContentHeader);
             this.panelFileContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelFileContent.Location = new System.Drawing.Point(0, 0);
             this.panelFileContent.Margin = new System.Windows.Forms.Padding(4);
             this.panelFileContent.Name = "panelFileContent";
-            this.panelFileContent.Padding = new System.Windows.Forms.Padding(1);
+            this.panelFileContent.Padding = new System.Windows.Forms.Padding(2);
             this.panelFileContent.Size = new System.Drawing.Size(1499, 433);
             this.panelFileContent.TabIndex = 0;
             // 
             // txtFileContent
             // 
-            this.txtFileContent.BackColor = System.Drawing.SystemColors.Window;
+            this.txtFileContent.BackColor = System.Drawing.Color.White;
             this.txtFileContent.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFileContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtFileContent.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFileContent.Location = new System.Drawing.Point(1, 57);
+            this.txtFileContent.Location = new System.Drawing.Point(2, 58);
             this.txtFileContent.Margin = new System.Windows.Forms.Padding(4);
             this.txtFileContent.Name = "txtFileContent";
             this.txtFileContent.ReadOnly = true;
-            this.txtFileContent.Size = new System.Drawing.Size(1497, 375);
+            this.txtFileContent.Size = new System.Drawing.Size(1495, 373);
             this.txtFileContent.TabIndex = 1;
             this.txtFileContent.Text = "";
             // 
             // panelFileContentHeader
             // 
-            this.panelFileContentHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+            this.panelFileContentHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             this.panelFileContentHeader.Controls.Add(this.lblFileContent);
             this.panelFileContentHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFileContentHeader.Location = new System.Drawing.Point(1, 1);
+            this.panelFileContentHeader.Location = new System.Drawing.Point(2, 2);
             this.panelFileContentHeader.Margin = new System.Windows.Forms.Padding(4);
             this.panelFileContentHeader.Name = "panelFileContentHeader";
             this.panelFileContentHeader.Padding = new System.Windows.Forms.Padding(21, 14, 21, 14);
-            this.panelFileContentHeader.Size = new System.Drawing.Size(1497, 56);
+            this.panelFileContentHeader.Size = new System.Drawing.Size(1495, 56);
             this.panelFileContentHeader.TabIndex = 0;
             // 
             // lblFileContent
@@ -419,14 +443,14 @@
             // 
             // panelExecutionLog
             // 
-            this.panelExecutionLog.BackColor = System.Drawing.Color.White;
+            this.panelExecutionLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
             this.panelExecutionLog.Controls.Add(this.dgvExecutionLog);
             this.panelExecutionLog.Controls.Add(this.panelExecutionHeader);
             this.panelExecutionLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelExecutionLog.Location = new System.Drawing.Point(0, 0);
             this.panelExecutionLog.Margin = new System.Windows.Forms.Padding(4);
             this.panelExecutionLog.Name = "panelExecutionLog";
-            this.panelExecutionLog.Padding = new System.Windows.Forms.Padding(1);
+            this.panelExecutionLog.Padding = new System.Windows.Forms.Padding(2);
             this.panelExecutionLog.Size = new System.Drawing.Size(1499, 581);
             this.panelExecutionLog.TabIndex = 0;
             // 
@@ -440,11 +464,11 @@
             this.dgvExecutionLog.BackgroundColor = System.Drawing.Color.White;
             this.dgvExecutionLog.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvExecutionLog.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvExecutionLog.ColumnHeadersHeight = 40;
@@ -453,19 +477,20 @@
             this.Column1,
             this.Column2,
             this.Column3,
-            this.Column4});
+            this.Column4,
+            this.colViewDetails});
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             dataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(58)))), ((int)(((byte)(138)))));
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvExecutionLog.DefaultCellStyle = dataGridViewCellStyle5;
             this.dgvExecutionLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvExecutionLog.EnableHeadersVisualStyles = false;
-            this.dgvExecutionLog.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.dgvExecutionLog.Location = new System.Drawing.Point(1, 53);
+            this.dgvExecutionLog.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
+            this.dgvExecutionLog.Location = new System.Drawing.Point(2, 54);
             this.dgvExecutionLog.Margin = new System.Windows.Forms.Padding(4);
             this.dgvExecutionLog.MultiSelect = false;
             this.dgvExecutionLog.Name = "dgvExecutionLog";
@@ -474,17 +499,19 @@
             dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(58)))), ((int)(((byte)(138)))));
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvExecutionLog.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dgvExecutionLog.RowHeadersVisible = false;
             this.dgvExecutionLog.RowHeadersWidth = 51;
             this.dgvExecutionLog.RowTemplate.Height = 35;
             this.dgvExecutionLog.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvExecutionLog.Size = new System.Drawing.Size(1497, 527);
+            this.dgvExecutionLog.Size = new System.Drawing.Size(1495, 525);
             this.dgvExecutionLog.TabIndex = 2;
             this.dgvExecutionLog.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvExecutionLog_CellContentClick);
+            this.dgvExecutionLog.SelectionChanged += new System.EventHandler(this.dgvExecutionLog_SelectionChanged);
+            this.dgvExecutionLog.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvExecutionLog_CellPainting);
             // 
             // Column1
             // 
@@ -522,9 +549,19 @@
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
             // 
+            // colViewDetails
+            // 
+            this.colViewDetails.HeaderText = "操作";
+            this.colViewDetails.MinimumWidth = 9;
+            this.colViewDetails.Name = "colViewDetails";
+            this.colViewDetails.ReadOnly = true;
+            this.colViewDetails.Text = "查看详情";
+            this.colViewDetails.UseColumnTextForButtonValue = true;
+            this.colViewDetails.Width = 100;
+            // 
             // panelExecutionHeader
             // 
-            this.panelExecutionHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+            this.panelExecutionHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             this.panelExecutionHeader.Controls.Add(this.btnClearSearch);
             this.panelExecutionHeader.Controls.Add(this.chkShowPending);
             this.panelExecutionHeader.Controls.Add(this.txtExecutionSearch);
@@ -534,11 +571,11 @@
             this.panelExecutionHeader.Controls.Add(this.chkShowFailed);
             this.panelExecutionHeader.Controls.Add(this.chkShowSuccess);
             this.panelExecutionHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelExecutionHeader.Location = new System.Drawing.Point(1, 1);
+            this.panelExecutionHeader.Location = new System.Drawing.Point(2, 2);
             this.panelExecutionHeader.Margin = new System.Windows.Forms.Padding(4);
             this.panelExecutionHeader.Name = "panelExecutionHeader";
             this.panelExecutionHeader.Padding = new System.Windows.Forms.Padding(21, 14, 21, 14);
-            this.panelExecutionHeader.Size = new System.Drawing.Size(1497, 52);
+            this.panelExecutionHeader.Size = new System.Drawing.Size(1495, 52);
             this.panelExecutionHeader.TabIndex = 0;
             // 
             // btnClearSearch
@@ -729,7 +766,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(1925, 1127);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panelTop);
@@ -770,6 +807,7 @@
         private System.Windows.Forms.Button btnSqlOptions;
         private System.Windows.Forms.Button btnDbConfig;
         private System.Windows.Forms.Button btnSelectFolder;
+        private System.Windows.Forms.Button btnAbout;
         private System.Windows.Forms.Label lblDbInfo;
         private System.Windows.Forms.Label lblFolderPath;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -799,6 +837,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewButtonColumn colViewDetails;
         private System.Windows.Forms.CheckBox chkShowPending;
         private System.Windows.Forms.CheckBox chkShowFailed;
         private System.Windows.Forms.CheckBox chkShowSuccess;

@@ -285,6 +285,7 @@
     <Compile Include="ExecutionRecord.cs" />
     <Compile Include="FileEncodingHelper.cs" />
     <Compile Include="FileInfo.cs" />
+    <Compile Include="SqlSyntaxHighlighter.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

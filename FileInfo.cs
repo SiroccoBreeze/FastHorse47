@@ -7,6 +7,7 @@ namespace FastHorse
     {
         private string fileName;
         private string filePath;
+        private string executionStatus;
 
         public string FileName
         {
@@ -34,6 +35,41 @@ namespace FastHorse
             }
         }
 
+        public string ExecutionStatus
+        {
+            get { return executionStatus; }
+            set
+            {
+                if (executionStatus != value)
+                {
+                    executionStatus = value;
+                    OnPropertyChanged(nameof(ExecutionStatus));
+                    OnPropertyChanged(nameof(DisplayName));
+                }
+            }
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(ExecutionStatus))
+                    return FileName;
+                
+                switch (ExecutionStatus)
+                {
+                    case "成功":
+                        return $"✓ {FileName}";
+                    case "失败":
+                        return $"✗ {FileName}";
+                    case "执行中":
+                        return $"⏳ {FileName}";
+                    default:
+                        return FileName;
+                }
+            }
+        }
+
         public SqlFileInfo()
         {
         }
@@ -42,6 +78,7 @@ namespace FastHorse
         {
             this.FilePath = filePath;
             this.FileName = System.IO.Path.GetFileName(filePath);
+            this.ExecutionStatus = "";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
