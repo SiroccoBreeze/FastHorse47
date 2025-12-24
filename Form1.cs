@@ -32,6 +32,15 @@ namespace FastHorse
             InitializeForm();
             ApplyModernStyling();
             InitializeDataGridViewColumns();
+            
+            // 窗口大小改变时重新计算遮罩层位置
+            this.Resize += (s, e) =>
+            {
+                if (panelOverlay.Visible)
+                {
+                    CenterOverlayContent();
+                }
+            };
         }
 
         private void InitializeForm()
@@ -224,36 +233,40 @@ namespace FastHorse
                         
                         // 应用 SQL 语法高亮
                         ApplySqlSyntaxHighlight(sqlContent);
-                        
-                        // 检查该文件是否有执行记录
-                        var executionRecord = executionRecords.FirstOrDefault(r => r.FileName == fileInfo.FileName);
-                        if (executionRecord != null)
-                        {
-                            if (executionRecord.Status == "失败")
-                            {
-                                lblFileContent.Text = $"📄 {fileInfo.FileName} ⚠️ 执行失败";
-                                lblFileContent.ForeColor = Color.FromArgb(239, 68, 68);
-                            }
-                            else if (executionRecord.Status == "成功")
-                            {
-                                lblFileContent.Text = $"📄 {fileInfo.FileName} ✓ 执行成功";
-                                lblFileContent.ForeColor = Color.FromArgb(16, 185, 129);
-                            }
-                            else
-                            {
-                                lblFileContent.Text = $"📄 {fileInfo.FileName}";
-                                lblFileContent.ForeColor = Color.FromArgb(51, 65, 85);
-                            }
-                        }
-                        else
-                        {
-                            lblFileContent.Text = $"📄 {fileInfo.FileName}";
-                            lblFileContent.ForeColor = Color.FromArgb(51, 65, 85);
-                        }
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show($"读取文件失败: {ex.Message}", "错误", 
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void dgvFiles_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // 双击文件列表，打开文件所在文件夹并定位到该文件
+            if (e.RowIndex >= 0)
+            {
+                var row = dgvFiles.Rows[e.RowIndex];
+                if (row.DataBoundItem is SqlFileInfo fileInfo)
+                {
+                    try
+                    {
+                        if (System.IO.File.Exists(fileInfo.FilePath))
+                        {
+                            // 使用 explorer.exe /select 命令打开文件夹并选中文件
+                            Process.Start("explorer.exe", $"/select,\"{fileInfo.FilePath}\"");
+                        }
+                        else
+                        {
+                            MessageBox.Show($"文件不存在: {fileInfo.FilePath}", "错误", 
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"打开文件夹失败: {ex.Message}", "错误", 
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -266,12 +279,12 @@ namespace FastHorse
             if (sqlContent.Length > 50000)
             {
                 // 大文件使用快速高亮
-                SqlSyntaxHighlighter.ApplyFastSyntaxHighlight(txtFileContent, sqlContent);
+                txtFileContent.ApplyFastSyntaxHighlight(sqlContent);
             }
             else
             {
                 // 小文件使用完整高亮
-                SqlSyntaxHighlighter.ApplySyntaxHighlight(txtFileContent, sqlContent);
+                txtFileContent.ApplySyntaxHighlight(sqlContent);
             }
         }
 
@@ -1175,25 +1188,6 @@ namespace FastHorse
                                     
                                     // 应用 SQL 语法高亮
                                     ApplySqlSyntaxHighlight(sqlContent);
-                                    
-                                    lblFileContent.Text = $"📄 {fileInfo.FileName}";
-                                    
-                                    // 如果执行失败，高亮显示错误信息
-                                    if (record.Status == "失败" && !string.IsNullOrEmpty(record.ErrorMessage))
-                                    {
-                                        // 在文件内容标题中添加错误提示
-                                        lblFileContent.Text = $"📄 {fileInfo.FileName} ⚠️ 执行失败";
-                                        lblFileContent.ForeColor = Color.FromArgb(239, 68, 68);
-                                    }
-                                    else if (record.Status == "成功")
-                                    {
-                                        lblFileContent.Text = $"📄 {fileInfo.FileName} ✓ 执行成功";
-                                        lblFileContent.ForeColor = Color.FromArgb(16, 185, 129);
-                                    }
-                                    else
-                                    {
-                                        lblFileContent.ForeColor = Color.FromArgb(51, 65, 85);
-                                    }
                                 }
                                 catch (Exception ex)
                                 {
@@ -1315,14 +1309,27 @@ namespace FastHorse
             dgvFiles.Enabled = false;
             txtFileContent.Enabled = false;
             
+            // 计算居中位置
+            CenterOverlayContent();
+            
             panelOverlay.Visible = true;
             panelOverlay.Enabled = true;
             panelOverlay.BringToFront();
             panelOverlay.Refresh();
             
-            progressBarOverlay.Style = ProgressBarStyle.Marquee;
-            progressBarOverlay.Value = 0;
+            // 启动马动画
+            progressBarOverlay.Progress = 0;
+            progressBarOverlay.ProgressText = "";
+            progressBarOverlay.StartAnimation();
             Application.DoEvents();
+        }
+
+        private void CenterOverlayContent()
+        {
+            // 计算居中位置
+            int x = (this.ClientSize.Width - panelOverlayContent.Width) / 2;
+            int y = (this.ClientSize.Height - panelOverlayContent.Height) / 2;
+            panelOverlayContent.Location = new Point(x, y);
         }
 
         private void UpdateOverlayProgress(int current, int total, string fileName)
@@ -1334,6 +1341,12 @@ namespace FastHorse
             }
 
             lblOverlayProgress.Text = $"正在执行第 {current} / {total} 个文件: {fileName}";
+            
+            // 更新进度条
+            int progress = (int)((current * 100.0) / total);
+            progressBarOverlay.Progress = progress;
+            progressBarOverlay.ProgressText = $"{progress}%";
+            
             Application.DoEvents();
         }
 
@@ -1345,9 +1358,11 @@ namespace FastHorse
                 return;
             }
 
+            // 停止马动画
+            progressBarOverlay.StopAnimation();
+            
             panelOverlay.Visible = false;
             panelOverlay.Enabled = false;
-            progressBarOverlay.Style = ProgressBarStyle.Continuous;
             
             // 恢复所有按钮和控件
             btnSelectFolder.Enabled = true;

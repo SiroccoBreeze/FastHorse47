@@ -36,11 +36,11 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.btnAbout = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnSqlOptions = new System.Windows.Forms.Button();
             this.btnDbConfig = new System.Windows.Forms.Button();
             this.btnSelectFolder = new System.Windows.Forms.Button();
-            this.btnAbout = new System.Windows.Forms.Button();
             this.lblExecutionStats = new System.Windows.Forms.Label();
             this.lblDbInfo = new System.Windows.Forms.Label();
             this.lblFolderPath = new System.Windows.Forms.Label();
@@ -48,14 +48,9 @@
             this.panelFileList = new System.Windows.Forms.Panel();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.colFileListName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panelFileListHeader = new System.Windows.Forms.Panel();
-            this.lblFileCount = new System.Windows.Forms.Label();
-            this.lblFileList = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.panelFileContent = new System.Windows.Forms.Panel();
-            this.txtFileContent = new System.Windows.Forms.RichTextBox();
-            this.panelFileContentHeader = new System.Windows.Forms.Panel();
-            this.lblFileContent = new System.Windows.Forms.Label();
+            this.txtFileContent = new FastHorse.LineNumberRichTextBox();
             this.panelExecutionLog = new System.Windows.Forms.Panel();
             this.dgvExecutionLog = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -76,7 +71,10 @@
             this.panelOverlayContent = new FastHorse.RoundedPanel();
             this.lblOverlayMessage = new System.Windows.Forms.Label();
             this.lblOverlayProgress = new System.Windows.Forms.Label();
-            this.progressBarOverlay = new System.Windows.Forms.ProgressBar();
+            this.progressBarOverlay = new FastHorse.HorseProgressBar();
+            this.lblFileList = new System.Windows.Forms.Label();
+            this.lblFileCount = new System.Windows.Forms.Label();
+            this.panelFileListHeader = new System.Windows.Forms.Panel();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -84,16 +82,16 @@
             this.splitContainer1.SuspendLayout();
             this.panelFileList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
-            this.panelFileListHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            this.panelFileContent.SuspendLayout();
-            this.panelFileContentHeader.SuspendLayout();
             this.panelExecutionLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvExecutionLog)).BeginInit();
             this.panelExecutionHeader.SuspendLayout();
+            this.panelOverlay.SuspendLayout();
+            this.panelOverlayContent.SuspendLayout();
+            this.panelFileListHeader.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -110,10 +108,9 @@
             this.panelTop.Controls.Add(this.lblFolderPath);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Margin = new System.Windows.Forms.Padding(4);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Padding = new System.Windows.Forms.Padding(28, 21, 28, 21);
-            this.panelTop.Size = new System.Drawing.Size(1925, 107);
+            this.panelTop.Padding = new System.Windows.Forms.Padding(20, 15, 20, 15);
+            this.panelTop.Size = new System.Drawing.Size(1400, 77);
             this.panelTop.TabIndex = 0;
             // 
             // btnAbout
@@ -125,10 +122,9 @@
             this.btnAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAbout.Font = new System.Drawing.Font("Microsoft YaHei UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAbout.ForeColor = System.Drawing.Color.White;
-            this.btnAbout.Location = new System.Drawing.Point(1864, 12);
-            this.btnAbout.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAbout.Location = new System.Drawing.Point(1355, 9);
             this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(50, 47);
+            this.btnAbout.Size = new System.Drawing.Size(36, 34);
             this.btnAbout.TabIndex = 7;
             this.btnAbout.Text = "ℹ️";
             this.btnAbout.UseVisualStyleBackColor = false;
@@ -144,10 +140,9 @@
             this.btnExecute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExecute.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnExecute.ForeColor = System.Drawing.Color.White;
-            this.btnExecute.Location = new System.Drawing.Point(1777, 12);
-            this.btnExecute.Margin = new System.Windows.Forms.Padding(4);
+            this.btnExecute.Location = new System.Drawing.Point(1291, 9);
             this.btnExecute.Name = "btnExecute";
-            this.btnExecute.Size = new System.Drawing.Size(79, 47);
+            this.btnExecute.Size = new System.Drawing.Size(57, 34);
             this.btnExecute.TabIndex = 2;
             this.btnExecute.Text = "▶";
             this.btnExecute.UseVisualStyleBackColor = false;
@@ -161,10 +156,9 @@
             this.btnSqlOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSqlOptions.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnSqlOptions.ForeColor = System.Drawing.Color.White;
-            this.btnSqlOptions.Location = new System.Drawing.Point(414, 12);
-            this.btnSqlOptions.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSqlOptions.Location = new System.Drawing.Point(301, 9);
             this.btnSqlOptions.Name = "btnSqlOptions";
-            this.btnSqlOptions.Size = new System.Drawing.Size(169, 47);
+            this.btnSqlOptions.Size = new System.Drawing.Size(123, 34);
             this.btnSqlOptions.TabIndex = 6;
             this.btnSqlOptions.Text = "⚙️ 查询选项";
             this.btnSqlOptions.UseVisualStyleBackColor = false;
@@ -178,10 +172,9 @@
             this.btnDbConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDbConfig.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnDbConfig.ForeColor = System.Drawing.Color.White;
-            this.btnDbConfig.Location = new System.Drawing.Point(227, 12);
-            this.btnDbConfig.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDbConfig.Location = new System.Drawing.Point(165, 9);
             this.btnDbConfig.Name = "btnDbConfig";
-            this.btnDbConfig.Size = new System.Drawing.Size(169, 47);
+            this.btnDbConfig.Size = new System.Drawing.Size(123, 34);
             this.btnDbConfig.TabIndex = 1;
             this.btnDbConfig.Text = "⚙️ 数据库配置";
             this.btnDbConfig.UseVisualStyleBackColor = false;
@@ -195,10 +188,9 @@
             this.btnSelectFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSelectFolder.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnSelectFolder.ForeColor = System.Drawing.Color.White;
-            this.btnSelectFolder.Location = new System.Drawing.Point(32, 9);
-            this.btnSelectFolder.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSelectFolder.Location = new System.Drawing.Point(23, 6);
             this.btnSelectFolder.Name = "btnSelectFolder";
-            this.btnSelectFolder.Size = new System.Drawing.Size(173, 50);
+            this.btnSelectFolder.Size = new System.Drawing.Size(126, 36);
             this.btnSelectFolder.TabIndex = 0;
             this.btnSelectFolder.Text = "📁 选择文件夹";
             this.btnSelectFolder.UseVisualStyleBackColor = false;
@@ -209,10 +201,9 @@
             this.lblExecutionStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblExecutionStats.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblExecutionStats.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblExecutionStats.Location = new System.Drawing.Point(1572, 63);
-            this.lblExecutionStats.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblExecutionStats.Location = new System.Drawing.Point(1142, 45);
             this.lblExecutionStats.Name = "lblExecutionStats";
-            this.lblExecutionStats.Size = new System.Drawing.Size(257, 35);
+            this.lblExecutionStats.Size = new System.Drawing.Size(187, 25);
             this.lblExecutionStats.TabIndex = 5;
             this.lblExecutionStats.Text = "待执行";
             this.lblExecutionStats.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -222,10 +213,9 @@
             this.lblDbInfo.AutoSize = true;
             this.lblDbInfo.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblDbInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblDbInfo.Location = new System.Drawing.Point(591, 23);
-            this.lblDbInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDbInfo.Location = new System.Drawing.Point(430, 16);
             this.lblDbInfo.Name = "lblDbInfo";
-            this.lblDbInfo.Size = new System.Drawing.Size(184, 28);
+            this.lblDbInfo.Size = new System.Drawing.Size(132, 20);
             this.lblDbInfo.TabIndex = 4;
             this.lblDbInfo.Text = "🔌 数据库: 未配置";
             // 
@@ -234,10 +224,9 @@
             this.lblFolderPath.AutoSize = true;
             this.lblFolderPath.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblFolderPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblFolderPath.Location = new System.Drawing.Point(32, 63);
-            this.lblFolderPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblFolderPath.Location = new System.Drawing.Point(23, 45);
             this.lblFolderPath.Name = "lblFolderPath";
-            this.lblFolderPath.Size = new System.Drawing.Size(173, 28);
+            this.lblFolderPath.Size = new System.Drawing.Size(124, 20);
             this.lblFolderPath.TabIndex = 3;
             this.lblFolderPath.Text = "📁 未选择文件夹";
             // 
@@ -245,8 +234,7 @@
             // 
             this.splitContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 107);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 77);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -256,9 +244,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1925, 1020);
-            this.splitContainer1.SplitterDistance = 420;
-            this.splitContainer1.SplitterWidth = 6;
+            this.splitContainer1.Size = new System.Drawing.Size(1400, 728);
+            this.splitContainer1.SplitterDistance = 305;
             this.splitContainer1.TabIndex = 1;
             // 
             // panelFileList
@@ -268,10 +255,9 @@
             this.panelFileList.Controls.Add(this.panelFileListHeader);
             this.panelFileList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelFileList.Location = new System.Drawing.Point(0, 0);
-            this.panelFileList.Margin = new System.Windows.Forms.Padding(4);
             this.panelFileList.Name = "panelFileList";
-            this.panelFileList.Padding = new System.Windows.Forms.Padding(2);
-            this.panelFileList.Size = new System.Drawing.Size(420, 1020);
+            this.panelFileList.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.panelFileList.Size = new System.Drawing.Size(305, 728);
             this.panelFileList.TabIndex = 0;
             // 
             // dgvFiles
@@ -284,7 +270,7 @@
             this.dgvFiles.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
@@ -292,6 +278,7 @@
             this.dgvFiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvFiles.ColumnHeadersHeight = 35;
             this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvFiles.ColumnHeadersVisible = false;
             this.dgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colFileListName});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -306,7 +293,8 @@
             this.dgvFiles.EnableHeadersVisualStyles = false;
             this.dgvFiles.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dgvFiles.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
-            this.dgvFiles.Location = new System.Drawing.Point(2, 58);
+            this.dgvFiles.Location = new System.Drawing.Point(1, 41);
+            this.dgvFiles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvFiles.MultiSelect = false;
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.ReadOnly = true;
@@ -314,10 +302,11 @@
             this.dgvFiles.RowHeadersWidth = 72;
             this.dgvFiles.RowTemplate.Height = 30;
             this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFiles.Size = new System.Drawing.Size(416, 960);
+            this.dgvFiles.Size = new System.Drawing.Size(303, 686);
             this.dgvFiles.TabIndex = 1;
-            this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
+            this.dgvFiles.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFiles_CellDoubleClick);
             this.dgvFiles.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvFiles_CellPainting);
+            this.dgvFiles.SelectionChanged += new System.EventHandler(this.dgvFiles_SelectionChanged);
             // 
             // colFileListName
             // 
@@ -328,52 +317,11 @@
             this.colFileListName.Name = "colFileListName";
             this.colFileListName.ReadOnly = true;
             // 
-            // panelFileListHeader
-            // 
-            this.panelFileListHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-            this.panelFileListHeader.Controls.Add(this.lblFileCount);
-            this.panelFileListHeader.Controls.Add(this.lblFileList);
-            this.panelFileListHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFileListHeader.Location = new System.Drawing.Point(2, 2);
-            this.panelFileListHeader.Margin = new System.Windows.Forms.Padding(4);
-            this.panelFileListHeader.Name = "panelFileListHeader";
-            this.panelFileListHeader.Padding = new System.Windows.Forms.Padding(21, 14, 21, 14);
-            this.panelFileListHeader.Size = new System.Drawing.Size(416, 56);
-            this.panelFileListHeader.TabIndex = 0;
-            // 
-            // lblFileCount
-            // 
-            this.lblFileCount.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblFileCount.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblFileCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
-            this.lblFileCount.Location = new System.Drawing.Point(280, 14);
-            this.lblFileCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblFileCount.Name = "lblFileCount";
-            this.lblFileCount.Size = new System.Drawing.Size(117, 28);
-            this.lblFileCount.TabIndex = 1;
-            this.lblFileCount.Text = "0 个文件";
-            this.lblFileCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblFileList
-            // 
-            this.lblFileList.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblFileList.Font = new System.Drawing.Font("Microsoft YaHei UI", 7.714286F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblFileList.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-            this.lblFileList.Location = new System.Drawing.Point(21, 14);
-            this.lblFileList.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblFileList.Name = "lblFileList";
-            this.lblFileList.Size = new System.Drawing.Size(206, 28);
-            this.lblFileList.TabIndex = 0;
-            this.lblFileList.Text = "📋 文件列表";
-            this.lblFileList.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblFileList.Click += new System.EventHandler(this.lblFileList_Click);
-            // 
             // splitContainer2
             // 
             this.splitContainer2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -384,62 +332,33 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.panelExecutionLog);
-            this.splitContainer2.Size = new System.Drawing.Size(1499, 1020);
-            this.splitContainer2.SplitterDistance = 433;
-            this.splitContainer2.SplitterWidth = 6;
+            this.splitContainer2.Size = new System.Drawing.Size(1091, 728);
+            this.splitContainer2.SplitterDistance = 309;
             this.splitContainer2.TabIndex = 0;
             // 
             // panelFileContent
             // 
             this.panelFileContent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
             this.panelFileContent.Controls.Add(this.txtFileContent);
-            this.panelFileContent.Controls.Add(this.panelFileContentHeader);
             this.panelFileContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelFileContent.Location = new System.Drawing.Point(0, 0);
-            this.panelFileContent.Margin = new System.Windows.Forms.Padding(4);
             this.panelFileContent.Name = "panelFileContent";
-            this.panelFileContent.Padding = new System.Windows.Forms.Padding(2);
-            this.panelFileContent.Size = new System.Drawing.Size(1499, 433);
+            this.panelFileContent.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.panelFileContent.Size = new System.Drawing.Size(1091, 309);
             this.panelFileContent.TabIndex = 0;
             // 
             // txtFileContent
             // 
             this.txtFileContent.BackColor = System.Drawing.Color.White;
-            this.txtFileContent.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFileContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtFileContent.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFileContent.Location = new System.Drawing.Point(2, 58);
-            this.txtFileContent.Margin = new System.Windows.Forms.Padding(4);
+            this.txtFileContent.Location = new System.Drawing.Point(1, 1);
             this.txtFileContent.Name = "txtFileContent";
-            this.txtFileContent.ReadOnly = true;
-            this.txtFileContent.Size = new System.Drawing.Size(1495, 373);
+            this.txtFileContent.ReadOnlyText = true;
+            this.txtFileContent.Size = new System.Drawing.Size(1089, 307);
             this.txtFileContent.TabIndex = 1;
-            this.txtFileContent.Text = "";
-            // 
-            // panelFileContentHeader
-            // 
-            this.panelFileContentHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-            this.panelFileContentHeader.Controls.Add(this.lblFileContent);
-            this.panelFileContentHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFileContentHeader.Location = new System.Drawing.Point(2, 2);
-            this.panelFileContentHeader.Margin = new System.Windows.Forms.Padding(4);
-            this.panelFileContentHeader.Name = "panelFileContentHeader";
-            this.panelFileContentHeader.Padding = new System.Windows.Forms.Padding(21, 14, 21, 14);
-            this.panelFileContentHeader.Size = new System.Drawing.Size(1495, 56);
-            this.panelFileContentHeader.TabIndex = 0;
-            // 
-            // lblFileContent
-            // 
-            this.lblFileContent.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblFileContent.Font = new System.Drawing.Font("Microsoft YaHei UI", 7.714286F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblFileContent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-            this.lblFileContent.Location = new System.Drawing.Point(21, 14);
-            this.lblFileContent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblFileContent.Name = "lblFileContent";
-            this.lblFileContent.Size = new System.Drawing.Size(412, 28);
-            this.lblFileContent.TabIndex = 0;
-            this.lblFileContent.Text = "📄 文件内容";
-            this.lblFileContent.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.txtFileContent.TextBackColor = System.Drawing.Color.White;
+            this.txtFileContent.TextFont = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFileContent.TextForeColor = System.Drawing.SystemColors.WindowText;
             // 
             // panelExecutionLog
             // 
@@ -448,10 +367,9 @@
             this.panelExecutionLog.Controls.Add(this.panelExecutionHeader);
             this.panelExecutionLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelExecutionLog.Location = new System.Drawing.Point(0, 0);
-            this.panelExecutionLog.Margin = new System.Windows.Forms.Padding(4);
             this.panelExecutionLog.Name = "panelExecutionLog";
-            this.panelExecutionLog.Padding = new System.Windows.Forms.Padding(2);
-            this.panelExecutionLog.Size = new System.Drawing.Size(1499, 581);
+            this.panelExecutionLog.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.panelExecutionLog.Size = new System.Drawing.Size(1091, 415);
             this.panelExecutionLog.TabIndex = 0;
             // 
             // dgvExecutionLog
@@ -490,8 +408,7 @@
             this.dgvExecutionLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvExecutionLog.EnableHeadersVisualStyles = false;
             this.dgvExecutionLog.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
-            this.dgvExecutionLog.Location = new System.Drawing.Point(2, 54);
-            this.dgvExecutionLog.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvExecutionLog.Location = new System.Drawing.Point(1, 38);
             this.dgvExecutionLog.MultiSelect = false;
             this.dgvExecutionLog.Name = "dgvExecutionLog";
             this.dgvExecutionLog.ReadOnly = true;
@@ -507,11 +424,11 @@
             this.dgvExecutionLog.RowHeadersWidth = 51;
             this.dgvExecutionLog.RowTemplate.Height = 35;
             this.dgvExecutionLog.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvExecutionLog.Size = new System.Drawing.Size(1495, 525);
+            this.dgvExecutionLog.Size = new System.Drawing.Size(1089, 376);
             this.dgvExecutionLog.TabIndex = 2;
             this.dgvExecutionLog.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvExecutionLog_CellContentClick);
-            this.dgvExecutionLog.SelectionChanged += new System.EventHandler(this.dgvExecutionLog_SelectionChanged);
             this.dgvExecutionLog.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvExecutionLog_CellPainting);
+            this.dgvExecutionLog.SelectionChanged += new System.EventHandler(this.dgvExecutionLog_SelectionChanged);
             // 
             // Column1
             // 
@@ -557,7 +474,6 @@
             this.colViewDetails.ReadOnly = true;
             this.colViewDetails.Text = "查看详情";
             this.colViewDetails.UseColumnTextForButtonValue = true;
-            this.colViewDetails.Width = 100;
             // 
             // panelExecutionHeader
             // 
@@ -571,11 +487,10 @@
             this.panelExecutionHeader.Controls.Add(this.chkShowFailed);
             this.panelExecutionHeader.Controls.Add(this.chkShowSuccess);
             this.panelExecutionHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelExecutionHeader.Location = new System.Drawing.Point(2, 2);
-            this.panelExecutionHeader.Margin = new System.Windows.Forms.Padding(4);
+            this.panelExecutionHeader.Location = new System.Drawing.Point(1, 1);
             this.panelExecutionHeader.Name = "panelExecutionHeader";
-            this.panelExecutionHeader.Padding = new System.Windows.Forms.Padding(21, 14, 21, 14);
-            this.panelExecutionHeader.Size = new System.Drawing.Size(1495, 52);
+            this.panelExecutionHeader.Padding = new System.Windows.Forms.Padding(15, 10, 15, 10);
+            this.panelExecutionHeader.Size = new System.Drawing.Size(1089, 37);
             this.panelExecutionHeader.TabIndex = 0;
             // 
             // btnClearSearch
@@ -587,10 +502,9 @@
             this.btnClearSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClearSearch.Font = new System.Drawing.Font("Microsoft YaHei UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnClearSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.btnClearSearch.Location = new System.Drawing.Point(1028, 7);
-            this.btnClearSearch.Margin = new System.Windows.Forms.Padding(4);
+            this.btnClearSearch.Location = new System.Drawing.Point(750, 5);
             this.btnClearSearch.Name = "btnClearSearch";
-            this.btnClearSearch.Size = new System.Drawing.Size(67, 34);
+            this.btnClearSearch.Size = new System.Drawing.Size(49, 24);
             this.btnClearSearch.TabIndex = 5;
             this.btnClearSearch.Text = "清除";
             this.btnClearSearch.UseVisualStyleBackColor = false;
@@ -603,10 +517,9 @@
             this.chkShowPending.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkShowPending.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.chkShowPending.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.chkShowPending.Location = new System.Drawing.Point(145, 10);
-            this.chkShowPending.Margin = new System.Windows.Forms.Padding(4);
+            this.chkShowPending.Location = new System.Drawing.Point(105, 7);
             this.chkShowPending.Name = "chkShowPending";
-            this.chkShowPending.Size = new System.Drawing.Size(136, 32);
+            this.chkShowPending.Size = new System.Drawing.Size(101, 24);
             this.chkShowPending.TabIndex = 0;
             this.chkShowPending.Text = "⏳ 进行中";
             this.chkShowPending.UseVisualStyleBackColor = true;
@@ -617,10 +530,9 @@
             this.txtExecutionSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExecutionSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtExecutionSearch.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtExecutionSearch.Location = new System.Drawing.Point(691, 8);
-            this.txtExecutionSearch.Margin = new System.Windows.Forms.Padding(4);
+            this.txtExecutionSearch.Location = new System.Drawing.Point(505, 6);
             this.txtExecutionSearch.Name = "txtExecutionSearch";
-            this.txtExecutionSearch.Size = new System.Drawing.Size(329, 34);
+            this.txtExecutionSearch.Size = new System.Drawing.Size(240, 27);
             this.txtExecutionSearch.TabIndex = 4;
             this.txtExecutionSearch.TextChanged += new System.EventHandler(this.txtExecutionSearch_TextChanged);
             // 
@@ -629,10 +541,9 @@
             this.lblExecutionLog.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblExecutionLog.Font = new System.Drawing.Font("Microsoft YaHei UI", 7.714286F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblExecutionLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-            this.lblExecutionLog.Location = new System.Drawing.Point(21, 14);
-            this.lblExecutionLog.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblExecutionLog.Location = new System.Drawing.Point(15, 10);
             this.lblExecutionLog.Name = "lblExecutionLog";
-            this.lblExecutionLog.Size = new System.Drawing.Size(116, 24);
+            this.lblExecutionLog.Size = new System.Drawing.Size(84, 17);
             this.lblExecutionLog.TabIndex = 0;
             this.lblExecutionLog.Text = "📊 执行记录";
             this.lblExecutionLog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -644,10 +555,9 @@
             this.lblSearchKeyword.AutoSize = true;
             this.lblSearchKeyword.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblSearchKeyword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblSearchKeyword.Location = new System.Drawing.Point(575, 11);
-            this.lblSearchKeyword.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSearchKeyword.Location = new System.Drawing.Point(420, 8);
             this.lblSearchKeyword.Name = "lblSearchKeyword";
-            this.lblSearchKeyword.Size = new System.Drawing.Size(131, 28);
+            this.lblSearchKeyword.Size = new System.Drawing.Size(94, 20);
             this.lblSearchKeyword.TabIndex = 3;
             this.lblSearchKeyword.Text = "🔍 关键字：";
             // 
@@ -656,10 +566,9 @@
             this.lblExecutionSummary.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblExecutionSummary.Font = new System.Drawing.Font("Microsoft YaHei UI", 7.714286F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblExecutionSummary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblExecutionSummary.Location = new System.Drawing.Point(1235, 14);
-            this.lblExecutionSummary.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblExecutionSummary.Location = new System.Drawing.Point(899, 10);
             this.lblExecutionSummary.Name = "lblExecutionSummary";
-            this.lblExecutionSummary.Size = new System.Drawing.Size(241, 24);
+            this.lblExecutionSummary.Size = new System.Drawing.Size(175, 17);
             this.lblExecutionSummary.TabIndex = 1;
             this.lblExecutionSummary.Text = "共 0 条 | ✓ 0 | ✗ 0 | ⏳ 0";
             this.lblExecutionSummary.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -672,10 +581,9 @@
             this.chkShowFailed.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkShowFailed.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.chkShowFailed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.chkShowFailed.Location = new System.Drawing.Point(387, 10);
-            this.chkShowFailed.Margin = new System.Windows.Forms.Padding(4);
+            this.chkShowFailed.Location = new System.Drawing.Point(281, 7);
             this.chkShowFailed.Name = "chkShowFailed";
-            this.chkShowFailed.Size = new System.Drawing.Size(100, 32);
+            this.chkShowFailed.Size = new System.Drawing.Size(77, 24);
             this.chkShowFailed.TabIndex = 2;
             this.chkShowFailed.Text = "✗ 失败";
             this.chkShowFailed.UseVisualStyleBackColor = true;
@@ -688,10 +596,9 @@
             this.chkShowSuccess.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkShowSuccess.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.chkShowSuccess.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.chkShowSuccess.Location = new System.Drawing.Point(280, 12);
-            this.chkShowSuccess.Margin = new System.Windows.Forms.Padding(4);
+            this.chkShowSuccess.Location = new System.Drawing.Point(204, 9);
             this.chkShowSuccess.Name = "chkShowSuccess";
-            this.chkShowSuccess.Size = new System.Drawing.Size(99, 32);
+            this.chkShowSuccess.Size = new System.Drawing.Size(76, 24);
             this.chkShowSuccess.TabIndex = 1;
             this.chkShowSuccess.Text = "✓ 成功";
             this.chkShowSuccess.UseVisualStyleBackColor = true;
@@ -703,26 +610,27 @@
             this.panelOverlay.Controls.Add(this.panelOverlayContent);
             this.panelOverlay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOverlay.Location = new System.Drawing.Point(0, 0);
+            this.panelOverlay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelOverlay.Name = "panelOverlay";
-            this.panelOverlay.Size = new System.Drawing.Size(1925, 1127);
-            this.panelOverlay.TabIndex = 2;
+            this.panelOverlay.Size = new System.Drawing.Size(1400, 805);
+            this.panelOverlay.TabIndex = 3;
             this.panelOverlay.Visible = false;
-            this.panelOverlay.Enabled = true;
             // 
             // panelOverlayContent
             // 
             this.panelOverlayContent.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panelOverlayContent.BackColor = System.Drawing.Color.White;
-            this.panelOverlayContent.CornerRadius = 12;
             this.panelOverlayContent.Controls.Add(this.lblOverlayMessage);
             this.panelOverlayContent.Controls.Add(this.lblOverlayProgress);
             this.panelOverlayContent.Controls.Add(this.progressBarOverlay);
-            this.panelOverlayContent.Location = new System.Drawing.Point(612, 450);
+            this.panelOverlayContent.CornerRadius = 12;
+            this.panelOverlayContent.Location = new System.Drawing.Point(350, 300);
+            this.panelOverlayContent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelOverlayContent.Name = "panelOverlayContent";
-            this.panelOverlayContent.Padding = new System.Windows.Forms.Padding(30);
+            this.panelOverlayContent.Padding = new System.Windows.Forms.Padding(30, 20, 30, 20);
             this.panelOverlayContent.ShadowColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.panelOverlayContent.ShadowOffset = 8;
-            this.panelOverlayContent.Size = new System.Drawing.Size(700, 200);
+            this.panelOverlayContent.Size = new System.Drawing.Size(700, 210);
             this.panelOverlayContent.TabIndex = 2;
             // 
             // lblOverlayMessage
@@ -732,8 +640,9 @@
             this.lblOverlayMessage.Font = new System.Drawing.Font("Microsoft YaHei UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblOverlayMessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
             this.lblOverlayMessage.Location = new System.Drawing.Point(30, 30);
+            this.lblOverlayMessage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblOverlayMessage.Name = "lblOverlayMessage";
-            this.lblOverlayMessage.Size = new System.Drawing.Size(640, 45);
+            this.lblOverlayMessage.Size = new System.Drawing.Size(640, 40);
             this.lblOverlayMessage.TabIndex = 1;
             this.lblOverlayMessage.Text = "正在执行脚本...";
             this.lblOverlayMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -742,9 +651,10 @@
             // 
             this.lblOverlayProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblOverlayProgress.Font = new System.Drawing.Font("Microsoft YaHei UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblOverlayProgress.Font = new System.Drawing.Font("Microsoft YaHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblOverlayProgress.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblOverlayProgress.Location = new System.Drawing.Point(30, 85);
+            this.lblOverlayProgress.Location = new System.Drawing.Point(30, 80);
+            this.lblOverlayProgress.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblOverlayProgress.Name = "lblOverlayProgress";
             this.lblOverlayProgress.Size = new System.Drawing.Size(640, 30);
             this.lblOverlayProgress.TabIndex = 2;
@@ -755,25 +665,63 @@
             // 
             this.progressBarOverlay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarOverlay.Location = new System.Drawing.Point(30, 135);
-            this.progressBarOverlay.MarqueeAnimationSpeed = 50;
+            this.progressBarOverlay.BackColor = System.Drawing.Color.White;
+            this.progressBarOverlay.Location = new System.Drawing.Point(30, 130);
+            this.progressBarOverlay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBarOverlay.Name = "progressBarOverlay";
-            this.progressBarOverlay.Size = new System.Drawing.Size(640, 30);
-            this.progressBarOverlay.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBarOverlay.Progress = 0;
+            this.progressBarOverlay.ProgressText = "";
+            this.progressBarOverlay.Size = new System.Drawing.Size(640, 40);
             this.progressBarOverlay.TabIndex = 0;
+            // 
+            // lblFileList
+            // 
+            this.lblFileList.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblFileList.Font = new System.Drawing.Font("Microsoft YaHei UI", 7.714286F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblFileList.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
+            this.lblFileList.Location = new System.Drawing.Point(15, 10);
+            this.lblFileList.Name = "lblFileList";
+            this.lblFileList.Size = new System.Drawing.Size(150, 20);
+            this.lblFileList.TabIndex = 0;
+            this.lblFileList.Text = "📋 文件列表";
+            this.lblFileList.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFileList.Click += new System.EventHandler(this.lblFileList_Click);
+            // 
+            // lblFileCount
+            // 
+            this.lblFileCount.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lblFileCount.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblFileCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
+            this.lblFileCount.Location = new System.Drawing.Point(203, 10);
+            this.lblFileCount.Name = "lblFileCount";
+            this.lblFileCount.Size = new System.Drawing.Size(85, 20);
+            this.lblFileCount.TabIndex = 1;
+            this.lblFileCount.Text = "0 个文件";
+            this.lblFileCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // panelFileListHeader
+            // 
+            this.panelFileListHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            this.panelFileListHeader.Controls.Add(this.lblFileCount);
+            this.panelFileListHeader.Controls.Add(this.lblFileList);
+            this.panelFileListHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelFileListHeader.Location = new System.Drawing.Point(1, 1);
+            this.panelFileListHeader.Name = "panelFileListHeader";
+            this.panelFileListHeader.Padding = new System.Windows.Forms.Padding(15, 10, 15, 10);
+            this.panelFileListHeader.Size = new System.Drawing.Size(303, 40);
+            this.panelFileListHeader.TabIndex = 0;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
-            this.ClientSize = new System.Drawing.Size(1925, 1127);
+            this.ClientSize = new System.Drawing.Size(1400, 805);
+            this.Controls.Add(this.panelOverlay);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panelTop);
-            this.Controls.Add(this.panelOverlay);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.MinimumSize = new System.Drawing.Size(1751, 982);
+            this.MinimumSize = new System.Drawing.Size(1278, 715);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SQL Server 脚本批量执行工具 - FastHorse";
@@ -785,17 +733,17 @@
             this.splitContainer1.ResumeLayout(false);
             this.panelFileList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
-            this.panelFileListHeader.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.panelFileContent.ResumeLayout(false);
-            this.panelFileContentHeader.ResumeLayout(false);
             this.panelExecutionLog.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvExecutionLog)).EndInit();
             this.panelExecutionHeader.ResumeLayout(false);
             this.panelExecutionHeader.PerformLayout();
+            this.panelOverlay.ResumeLayout(false);
+            this.panelOverlayContent.ResumeLayout(false);
+            this.panelFileListHeader.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -813,14 +761,9 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Panel panelFileList;
         private System.Windows.Forms.DataGridView dgvFiles;
-        private System.Windows.Forms.Panel panelFileListHeader;
-        private System.Windows.Forms.Label lblFileCount;
-        private System.Windows.Forms.Label lblFileList;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Panel panelFileContent;
-        private System.Windows.Forms.RichTextBox txtFileContent;
-        private System.Windows.Forms.Panel panelFileContentHeader;
-        private System.Windows.Forms.Label lblFileContent;
+        private FastHorse.LineNumberRichTextBox txtFileContent;
         private System.Windows.Forms.Panel panelExecutionLog;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFileName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colExecuteTime;
@@ -847,6 +790,9 @@
         private FastHorse.RoundedPanel panelOverlayContent;
         private System.Windows.Forms.Label lblOverlayMessage;
         private System.Windows.Forms.Label lblOverlayProgress;
-        private System.Windows.Forms.ProgressBar progressBarOverlay;
+        private FastHorse.HorseProgressBar progressBarOverlay;
+        private System.Windows.Forms.Panel panelFileListHeader;
+        private System.Windows.Forms.Label lblFileCount;
+        private System.Windows.Forms.Label lblFileList;
     }
 }

@@ -286,6 +286,12 @@
     <Compile Include="FileEncodingHelper.cs" />
     <Compile Include="FileInfo.cs" />
     <Compile Include="SqlSyntaxHighlighter.cs" />
+    <Compile Include="LineNumberRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="HorseProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
