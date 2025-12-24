@@ -1,8 +1,0 @@
-﻿{
-  "Server": "127.0.0.1,8433",
-  "Database": "THIS4",
-  "UserId": "sa",
-  "Password": "Hc0912.*",
-  "IntegratedSecurity": false,
-  "ConnectionTimeout": 1
-}
