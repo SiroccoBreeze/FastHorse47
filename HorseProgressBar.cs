@@ -12,15 +12,16 @@ namespace FastHorse
     {
         private Timer animationTimer;
         private int animationFrame = 0;
-        private int horsePosition = 0;
         private int progress = 0;
         private string progressText = "";
 
-        // 马的动画帧（使用简化的图形表示）
+        // 马的动画帧 - 使用多个帧创建流畅的奔跑效果
         private readonly string[] horseFrames = new string[]
         {
-            "🐴",  // 帧1
-            "🐎",  // 帧2
+            "🐴",  // 帧1 - 站立
+            "🏇",  // 帧2 - 骑马
+            "🐎",  // 帧3 - 奔跑
+            "🏇",  // 帧4 - 骑马
         };
 
         public HorseProgressBar()
@@ -30,7 +31,7 @@ namespace FastHorse
             
             // 初始化动画定时器
             animationTimer = new Timer();
-            animationTimer.Interval = 150; // 150ms 切换一次动画帧
+            animationTimer.Interval = 100; // 100ms 切换一次动画帧，更流畅
             animationTimer.Tick += AnimationTimer_Tick;
         }
 
@@ -81,13 +82,7 @@ namespace FastHorse
             // 切换动画帧
             animationFrame = (animationFrame + 1) % horseFrames.Length;
             
-            // 移动马的位置
-            horsePosition += 3;
-            if (horsePosition > this.Width + 50)
-            {
-                horsePosition = -50;
-            }
-            
+            // 重绘控件
             this.Invalidate();
         }
 
@@ -125,22 +120,36 @@ namespace FastHorse
                 }
             }
 
-            // 绘制奔跑的马
-            string currentHorse = horseFrames[animationFrame];
-            using (Font horseFont = new Font("Segoe UI Emoji", 20, FontStyle.Regular))
-            using (SolidBrush horseBrush = new SolidBrush(Color.FromArgb(220, 38, 38)))
+            // 绘制奔跑的马 - 马的位置跟随进度条
+            if (progress > 0)
             {
-                // 计算马的位置（让马在进度条上方稍微浮动）
-                float horseX = horsePosition;
-                float horseY = (this.Height - 30) / 2;
-                
-                // 添加阴影效果
-                using (SolidBrush shadowBrush = new SolidBrush(Color.FromArgb(50, 0, 0, 0)))
+                string currentHorse = horseFrames[animationFrame];
+                using (Font horseFont = new Font("Segoe UI Emoji", 24, FontStyle.Regular))
+                using (SolidBrush horseBrush = new SolidBrush(Color.FromArgb(239, 68, 68)))
                 {
-                    g.DrawString(currentHorse, horseFont, shadowBrush, horseX + 2, horseY + 2);
+                    // 计算马的位置 - 跟随进度条的实际进度
+                    int progressWidth = (int)(this.Width * (progress / 100.0));
+                    float horseX = Math.Max(5, progressWidth - 30); // 马在进度条末端，留一点边距
+                    float horseY = (this.Height - 28) / 2;
+                    
+                    // 添加发光效果
+                    using (SolidBrush glowBrush = new SolidBrush(Color.FromArgb(80, 239, 68, 68)))
+                    {
+                        g.DrawString(currentHorse, horseFont, glowBrush, horseX - 1, horseY - 1);
+                        g.DrawString(currentHorse, horseFont, glowBrush, horseX + 1, horseY - 1);
+                        g.DrawString(currentHorse, horseFont, glowBrush, horseX - 1, horseY + 1);
+                        g.DrawString(currentHorse, horseFont, glowBrush, horseX + 1, horseY + 1);
+                    }
+                    
+                    // 添加阴影效果
+                    using (SolidBrush shadowBrush = new SolidBrush(Color.FromArgb(60, 0, 0, 0)))
+                    {
+                        g.DrawString(currentHorse, horseFont, shadowBrush, horseX + 2, horseY + 2);
+                    }
+                    
+                    // 绘制马
+                    g.DrawString(currentHorse, horseFont, horseBrush, horseX, horseY);
                 }
-                
-                g.DrawString(currentHorse, horseFont, horseBrush, horseX, horseY);
             }
 
             // 绘制进度文本

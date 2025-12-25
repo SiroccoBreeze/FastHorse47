@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Reflection;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 
@@ -25,6 +26,12 @@ namespace FastHorse
         private const string ConfigFileName = "dbconfig.json";
         private bool setAnsiNulls = true;
         private bool setQuotedIdentifier = false;
+        
+        // 性能优化相关字段
+        private System.Threading.Timer fileLoadDebounceTimer;
+        private string pendingFileToLoad = null;
+        private readonly object fileLoadLock = new object();
+        private bool isLoadingFile = false;
 
         public Form1()
         {
@@ -49,6 +56,10 @@ namespace FastHorse
             dgvFiles.AutoGenerateColumns = false;
             dgvFiles.DataSource = fileList;
             // colFileListName 已在 Designer 中配置
+            
+            // 优化 DataGridView 性能
+            dgvFiles.DoubleBuffered(true);
+            dgvExecutionLog.DoubleBuffered(true);
 
             // 确保执行记录 DataGridView 列正确初始化
             InitializeDataGridViewColumns();
@@ -226,19 +237,79 @@ namespace FastHorse
                 var selectedRow = dgvFiles.SelectedRows[0];
                 if (selectedRow.DataBoundItem is SqlFileInfo fileInfo)
                 {
-                    string filePath = fileInfo.FilePath;
-                    try
+                    // 使用防抖加载文件，避免快速切换时的卡顿
+                    DebounceLoadFile(fileInfo.FilePath);
+                }
+            }
+        }
+        
+        private void DebounceLoadFile(string filePath)
+        {
+            lock (fileLoadLock)
+            {
+                pendingFileToLoad = filePath;
+                
+                // 如果定时器不存在，创建它
+                if (fileLoadDebounceTimer == null)
+                {
+                    fileLoadDebounceTimer = new System.Threading.Timer(
+                        LoadFileCallback, 
+                        null, 
+                        150, // 延迟 150ms
+                        System.Threading.Timeout.Infinite);
+                }
+                else
+                {
+                    // 重置定时器
+                    fileLoadDebounceTimer.Change(150, System.Threading.Timeout.Infinite);
+                }
+            }
+        }
+        
+        private void LoadFileCallback(object state)
+        {
+            string fileToLoad;
+            lock (fileLoadLock)
+            {
+                if (isLoadingFile || string.IsNullOrEmpty(pendingFileToLoad))
+                    return;
+                    
+                fileToLoad = pendingFileToLoad;
+                pendingFileToLoad = null;
+                isLoadingFile = true;
+            }
+            
+            try
+            {
+                // 在后台线程读取文件
+                string sqlContent = FileEncodingHelper.ReadFileWithEncodingDetection(fileToLoad);
+                
+                // 在 UI 线程应用语法高亮
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new Action(() => ApplySqlSyntaxHighlightAsync(sqlContent)));
+                }
+                else
+                {
+                    ApplySqlSyntaxHighlightAsync(sqlContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new Action(() =>
                     {
-                        string sqlContent = FileEncodingHelper.ReadFileWithEncodingDetection(filePath);
-                        
-                        // 应用 SQL 语法高亮
-                        ApplySqlSyntaxHighlight(sqlContent);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"读取文件失败: {ex.Message}", "错误", 
+                        MessageBox.Show($"读取文件失败: {ex.Message}", "错误",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    }));
+                }
+            }
+            finally
+            {
+                lock (fileLoadLock)
+                {
+                    isLoadingFile = false;
                 }
             }
         }
@@ -277,6 +348,41 @@ namespace FastHorse
         {
             // 根据文件大小选择高亮方式
             if (sqlContent.Length > 50000)
+            {
+                // 大文件使用快速高亮
+                txtFileContent.ApplyFastSyntaxHighlight(sqlContent);
+            }
+            else
+            {
+                // 小文件使用完整高亮
+                txtFileContent.ApplySyntaxHighlight(sqlContent);
+            }
+        }
+        
+        private async void ApplySqlSyntaxHighlightAsync(string sqlContent)
+        {
+            // 先显示纯文本，避免卡顿
+            txtFileContent.TextBox.Text = sqlContent;
+            txtFileContent.TextBox.SelectionStart = 0;
+            txtFileContent.TextBox.SelectionLength = 0;
+            txtFileContent.TextBox.ScrollToCaret();
+            
+            // 强制刷新显示
+            Application.DoEvents();
+            
+            // 在后台线程应用语法高亮
+            await Task.Run(() =>
+            {
+                System.Threading.Thread.Sleep(50); // 短暂延迟，让 UI 先响应
+            });
+            
+            // 根据文件大小选择高亮方式
+            if (sqlContent.Length > 100000)
+            {
+                // 超大文件使用快速高亮
+                txtFileContent.ApplyFastSyntaxHighlight(sqlContent);
+            }
+            else if (sqlContent.Length > 50000)
             {
                 // 大文件使用快速高亮
                 txtFileContent.ApplyFastSyntaxHighlight(sqlContent);
@@ -1176,23 +1282,28 @@ namespace FastHorse
                         {
                             if (fileInfo.FileName == fileName)
                             {
-                                // 选中文件列表中的对应行
-                                dgvFiles.ClearSelection();
-                                dgvFiles.Rows[i].Selected = true;
-                                dgvFiles.FirstDisplayedScrollingRowIndex = i;
+                                // 临时禁用 dgvFiles 的 SelectionChanged 事件，避免重复触发
+                                dgvFiles.SelectionChanged -= dgvFiles_SelectionChanged;
                                 
-                                // 显示文件内容
                                 try
                                 {
-                                    string sqlContent = FileEncodingHelper.ReadFileWithEncodingDetection(fileInfo.FilePath);
+                                    // 选中文件列表中的对应行
+                                    dgvFiles.ClearSelection();
+                                    dgvFiles.Rows[i].Selected = true;
                                     
-                                    // 应用 SQL 语法高亮
-                                    ApplySqlSyntaxHighlight(sqlContent);
+                                    // 确保行可见
+                                    if (i >= 0 && i < dgvFiles.Rows.Count)
+                                    {
+                                        dgvFiles.FirstDisplayedScrollingRowIndex = i;
+                                    }
+                                    
+                                    // 使用防抖加载文件
+                                    DebounceLoadFile(fileInfo.FilePath);
                                 }
-                                catch (Exception ex)
+                                finally
                                 {
-                                    MessageBox.Show($"读取文件失败: {ex.Message}", "错误", 
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    // 重新启用事件
+                                    dgvFiles.SelectionChanged += dgvFiles_SelectionChanged;
                                 }
                                 
                                 break;
@@ -1262,9 +1373,9 @@ namespace FastHorse
                 {
                     if (!string.IsNullOrEmpty(fileInfo.ExecutionStatus))
                     {
-                        Color backColor = Color.White;
-                        Color foreColor = Color.FromArgb(71, 85, 105);
-
+                        // 使用缓存的颜色值，避免重复创建 Color 对象
+                        Color backColor, foreColor;
+                        
                         switch (fileInfo.ExecutionStatus)
                         {
                             case "成功":
@@ -1279,12 +1390,18 @@ namespace FastHorse
                                 backColor = Color.FromArgb(239, 246, 255);
                                 foreColor = Color.FromArgb(37, 99, 235);
                                 break;
+                            default:
+                                return; // 无需处理
                         }
 
-                        e.CellStyle.BackColor = backColor;
-                        e.CellStyle.ForeColor = foreColor;
-                        e.CellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
-                        e.CellStyle.SelectionForeColor = foreColor;
+                        // 只在颜色改变时更新样式
+                        if (e.CellStyle.BackColor != backColor)
+                        {
+                            e.CellStyle.BackColor = backColor;
+                            e.CellStyle.ForeColor = foreColor;
+                            e.CellStyle.SelectionBackColor = Color.FromArgb(219, 234, 254);
+                            e.CellStyle.SelectionForeColor = foreColor;
+                        }
                     }
                 }
             }
@@ -1371,6 +1488,20 @@ namespace FastHorse
             dgvFiles.Enabled = true;
             txtFileContent.Enabled = true;
             UpdateExecuteButtonState();
+        }
+    }
+    
+    /// <summary>
+    /// DataGridView 扩展方法
+    /// </summary>
+    public static class DataGridViewExtensions
+    {
+        public static void DoubleBuffered(this DataGridView dgv, bool setting)
+        {
+            Type dgvType = dgv.GetType();
+            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", 
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            pi?.SetValue(dgv, setting, null);
         }
     }
 }

@@ -83,6 +83,8 @@ namespace FastHorse
             if (textBox.Text.Length == 0)
                 return;
 
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
             // 获取第一个可见字符的索引
             int firstCharIndex = textBox.GetCharIndexFromPosition(new Point(1, 1));
             int firstLineIndex = textBox.GetLineFromCharIndex(firstCharIndex);
@@ -90,12 +92,13 @@ namespace FastHorse
             // 获取第一行的位置
             Point firstLinePos = textBox.GetPositionFromCharIndex(textBox.GetFirstCharIndexFromLine(firstLineIndex));
 
-            // 设置字体和颜色
-            using (Font font = new Font(textBox.Font.FontFamily, textBox.Font.Size))
+            // 设置字体和颜色 - 使用与 textBox 完全相同的字体
+            using (Font font = new Font(textBox.Font.FontFamily, textBox.Font.Size, textBox.Font.Style))
             using (Brush brush = new SolidBrush(Color.FromArgb(100, 116, 139)))
             {
-                int lineHeight = TextRenderer.MeasureText("0", font).Height;
-                int currentY = firstLinePos.Y;
+                // 使用 Graphics.MeasureString 获取更精确的行高
+                float lineHeight = e.Graphics.MeasureString("0", font).Height;
+                float currentY = firstLinePos.Y;
                 int lineNumber = firstLineIndex + 1;
 
                 // 绘制可见的行号
@@ -106,9 +109,9 @@ namespace FastHorse
                     // 右对齐行号
                     SizeF textSize = e.Graphics.MeasureString(lineNumberText, font);
                     float x = lineNumberPanel.Width - textSize.Width - 10;
-                    float y = currentY;
-
-                    e.Graphics.DrawString(lineNumberText, font, brush, x, y);
+                    
+                    // 使用 Graphics.DrawString 以确保与 RichTextBox 的渲染一致
+                    e.Graphics.DrawString(lineNumberText, font, brush, x, currentY);
 
                     currentY += lineHeight;
                     lineNumber++;
