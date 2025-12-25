@@ -70,6 +70,7 @@
             this.panelOverlay = new FastHorse.TransparentPanel();
             this.panelOverlayContent = new FastHorse.RoundedPanel();
             this.lblOverlayMessage = new System.Windows.Forms.Label();
+            this.lblOverlayDatabaseInfo = new System.Windows.Forms.Label();
             this.lblOverlayProgress = new System.Windows.Forms.Label();
             this.progressBarOverlay = new FastHorse.HorseProgressBar();
             this.lblFileList = new System.Windows.Forms.Label();
@@ -621,6 +622,7 @@
             this.panelOverlayContent.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panelOverlayContent.BackColor = System.Drawing.Color.White;
             this.panelOverlayContent.Controls.Add(this.lblOverlayMessage);
+            this.panelOverlayContent.Controls.Add(this.lblOverlayDatabaseInfo);
             this.panelOverlayContent.Controls.Add(this.lblOverlayProgress);
             this.panelOverlayContent.Controls.Add(this.progressBarOverlay);
             this.panelOverlayContent.CornerRadius = 12;
@@ -630,7 +632,7 @@
             this.panelOverlayContent.Padding = new System.Windows.Forms.Padding(30, 20, 30, 20);
             this.panelOverlayContent.ShadowColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.panelOverlayContent.ShadowOffset = 8;
-            this.panelOverlayContent.Size = new System.Drawing.Size(700, 210);
+            this.panelOverlayContent.Size = new System.Drawing.Size(700, 250);
             this.panelOverlayContent.TabIndex = 2;
             // 
             // lblOverlayMessage
@@ -639,21 +641,35 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOverlayMessage.Font = new System.Drawing.Font("Microsoft YaHei UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblOverlayMessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-            this.lblOverlayMessage.Location = new System.Drawing.Point(30, 30);
+            this.lblOverlayMessage.Location = new System.Drawing.Point(30, 25);
             this.lblOverlayMessage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblOverlayMessage.Name = "lblOverlayMessage";
-            this.lblOverlayMessage.Size = new System.Drawing.Size(640, 40);
+            this.lblOverlayMessage.Size = new System.Drawing.Size(640, 35);
             this.lblOverlayMessage.TabIndex = 1;
             this.lblOverlayMessage.Text = "正在执行脚本...";
             this.lblOverlayMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblOverlayDatabaseInfo
+            // 
+            this.lblOverlayDatabaseInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOverlayDatabaseInfo.Font = new System.Drawing.Font("Microsoft YaHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblOverlayDatabaseInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
+            this.lblOverlayDatabaseInfo.Location = new System.Drawing.Point(30, 65);
+            this.lblOverlayDatabaseInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblOverlayDatabaseInfo.Name = "lblOverlayDatabaseInfo";
+            this.lblOverlayDatabaseInfo.Size = new System.Drawing.Size(640, 30);
+            this.lblOverlayDatabaseInfo.TabIndex = 3;
+            this.lblOverlayDatabaseInfo.Text = "📊 数据库: localhost / master";
+            this.lblOverlayDatabaseInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblOverlayProgress
             // 
             this.lblOverlayProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblOverlayProgress.Font = new System.Drawing.Font("Microsoft YaHei UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblOverlayProgress.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblOverlayProgress.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-            this.lblOverlayProgress.Location = new System.Drawing.Point(30, 80);
+            this.lblOverlayProgress.Location = new System.Drawing.Point(30, 105);
             this.lblOverlayProgress.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblOverlayProgress.Name = "lblOverlayProgress";
             this.lblOverlayProgress.Size = new System.Drawing.Size(640, 30);
@@ -666,12 +682,12 @@
             this.progressBarOverlay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBarOverlay.BackColor = System.Drawing.Color.White;
-            this.progressBarOverlay.Location = new System.Drawing.Point(30, 130);
+            this.progressBarOverlay.Location = new System.Drawing.Point(30, 160);
             this.progressBarOverlay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBarOverlay.Name = "progressBarOverlay";
             this.progressBarOverlay.Progress = 0;
             this.progressBarOverlay.ProgressText = "";
-            this.progressBarOverlay.Size = new System.Drawing.Size(640, 40);
+            this.progressBarOverlay.Size = new System.Drawing.Size(640, 45);
             this.progressBarOverlay.TabIndex = 0;
             // 
             // lblFileList
@@ -789,6 +805,7 @@
         private FastHorse.TransparentPanel panelOverlay;
         private FastHorse.RoundedPanel panelOverlayContent;
         private System.Windows.Forms.Label lblOverlayMessage;
+        private System.Windows.Forms.Label lblOverlayDatabaseInfo;
         private System.Windows.Forms.Label lblOverlayProgress;
         private FastHorse.HorseProgressBar progressBarOverlay;
         private System.Windows.Forms.Panel panelFileListHeader;

@@ -89,32 +89,48 @@ namespace FastHorse
             int firstCharIndex = textBox.GetCharIndexFromPosition(new Point(1, 1));
             int firstLineIndex = textBox.GetLineFromCharIndex(firstCharIndex);
 
-            // 获取第一行的位置
-            Point firstLinePos = textBox.GetPositionFromCharIndex(textBox.GetFirstCharIndexFromLine(firstLineIndex));
-
             // 设置字体和颜色 - 使用与 textBox 完全相同的字体
             using (Font font = new Font(textBox.Font.FontFamily, textBox.Font.Size, textBox.Font.Style))
             using (Brush brush = new SolidBrush(Color.FromArgb(100, 116, 139)))
             {
-                // 使用 Graphics.MeasureString 获取更精确的行高
-                float lineHeight = e.Graphics.MeasureString("0", font).Height;
-                float currentY = firstLinePos.Y;
+                // 绘制可见的行号 - 使用 RichTextBox 的实际行位置
                 int lineNumber = firstLineIndex + 1;
-
-                // 绘制可见的行号
-                while (currentY < textBox.Height && lineNumber <= textBox.Lines.Length)
+                int maxVisibleLine = Math.Min(textBox.Lines.Length, firstLineIndex + 100); // 限制绘制范围
+                
+                for (int i = firstLineIndex; i < maxVisibleLine; i++)
                 {
-                    string lineNumberText = lineNumber.ToString();
-                    
-                    // 右对齐行号
-                    SizeF textSize = e.Graphics.MeasureString(lineNumberText, font);
-                    float x = lineNumberPanel.Width - textSize.Width - 10;
-                    
-                    // 使用 Graphics.DrawString 以确保与 RichTextBox 的渲染一致
-                    e.Graphics.DrawString(lineNumberText, font, brush, x, currentY);
-
-                    currentY += lineHeight;
-                    lineNumber++;
+                    try
+                    {
+                        // 获取当前行的第一个字符索引
+                        int lineCharIndex = textBox.GetFirstCharIndexFromLine(i);
+                        if (lineCharIndex < 0) break;
+                        
+                        // 获取该字符在控件中的位置
+                        Point linePos = textBox.GetPositionFromCharIndex(lineCharIndex);
+                        
+                        // 如果行已经不可见，停止绘制
+                        if (linePos.Y >= textBox.Height) break;
+                        if (linePos.Y < 0)
+                        {
+                            lineNumber++;
+                            continue;
+                        }
+                        
+                        string lineNumberText = lineNumber.ToString();
+                        
+                        // 右对齐行号
+                        SizeF textSize = e.Graphics.MeasureString(lineNumberText, font);
+                        float x = lineNumberPanel.Width - textSize.Width - 10;
+                        
+                        // 绘制行号 - Y 坐标与代码行完全一致
+                        e.Graphics.DrawString(lineNumberText, font, brush, x, linePos.Y);
+                        
+                        lineNumber++;
+                    }
+                    catch
+                    {
+                        break;
+                    }
                 }
             }
 

@@ -568,7 +568,15 @@ namespace FastHorse
                 return;
             }
 
-            if (MessageBox.Show($"确定要执行 {sqlFiles.Count} 个SQL脚本吗？", "确认执行", 
+            // 构建确认消息，包含数据库信息
+            string confirmMessage = $"确定要执行 {sqlFiles.Count} 个 SQL 脚本吗？\n\n" +
+                                   $"📊 目标数据库信息：\n" +
+                                   $"   服务器：{dbConfig.Server}\n" +
+                                   $"   数据库：{dbConfig.Database}\n" +
+                                   $"   认证方式：{(dbConfig.IntegratedSecurity ? "Windows 身份验证" : "SQL Server 身份验证")}\n\n" +
+                                   $"⚠️ 请确认数据库信息正确后再执行！";
+            
+            if (MessageBox.Show(confirmMessage, "确认执行", 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
             {
                 return;
@@ -1416,6 +1424,11 @@ namespace FastHorse
             }
 
             lblOverlayMessage.Text = message;
+            
+            // 显示数据库信息
+            string dbInfo = $"📊 数据库: {dbConfig.Server} / {dbConfig.Database}";
+            lblOverlayDatabaseInfo.Text = dbInfo;
+            
             lblOverlayProgress.Text = "准备中...";
             
             // 禁用所有按钮和控件
