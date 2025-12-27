@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
@@ -26,6 +27,9 @@ namespace FastHorse
         private const string ConfigFileName = "dbconfig.json";
         private bool setAnsiNulls = true;
         private bool setQuotedIdentifier = false;
+        
+        // 数据库配置确认标记（每次启动程序都需要重新确认）
+        private bool isDatabaseConfigConfirmed = false;
         
         // 性能优化相关字段
         private System.Threading.Timer fileLoadDebounceTimer;
@@ -132,17 +136,58 @@ namespace FastHorse
 
         private void AddHoverEffect(Button btn, Color hoverColor)
         {
-            Color originalColor = btn.BackColor;
-            btn.MouseEnter += (s, e) => { if (btn.Enabled) btn.BackColor = hoverColor; };
-            btn.MouseLeave += (s, e) => { if (btn.Enabled) btn.BackColor = originalColor; };
+            btn.MouseEnter += (s, e) => 
+            { 
+                if (btn.Enabled) 
+                    btn.BackColor = hoverColor; 
+            };
+            
+            btn.MouseLeave += (s, e) => 
+            { 
+                if (btn.Enabled)
+                {
+                    // 根据按钮类型恢复正确的颜色
+                    if (btn == btnExecute)
+                    {
+                        // 执行按钮：根据是否可执行决定颜色
+                        bool canExecute = isDatabaseConfigConfirmed &&
+                                         !string.IsNullOrEmpty(dbConfig.Server) && 
+                                         !string.IsNullOrEmpty(dbConfig.Database) && 
+                                         sqlFiles.Count > 0;
+                        btn.BackColor = canExecute ? Color.FromArgb(16, 185, 129) : Color.FromArgb(156, 163, 175);
+                    }
+                    else if (btn == btnSelectFolder)
+                    {
+                        btn.BackColor = Color.FromArgb(99, 102, 241);
+                    }
+                    else if (btn == btnDbConfig || btn == btnSqlOptions)
+                    {
+                        btn.BackColor = Color.FromArgb(59, 130, 246);
+                    }
+                    else if (btn == btnAbout)
+                    {
+                        btn.BackColor = Color.FromArgb(148, 163, 184);
+                    }
+                }
+            };
         }
 
         private void UpdateDatabaseInfo()
         {
             if (!string.IsNullOrEmpty(dbConfig.Server) && !string.IsNullOrEmpty(dbConfig.Database))
             {
-                lblDbInfo.Text = $"🔌 数据库: {dbConfig.Server} / {dbConfig.Database}";
-                lblDbInfo.ForeColor = Color.FromArgb(16, 185, 129); // 翠绿色
+                if (isDatabaseConfigConfirmed)
+                {
+                    // 已确认：显示绿色
+                    lblDbInfo.Text = $"🔌 数据库: {dbConfig.Server} / {dbConfig.Database} ✓";
+                    lblDbInfo.ForeColor = Color.FromArgb(16, 185, 129); // 翠绿色
+                }
+                else
+                {
+                    // 未确认：显示橙色警告
+                    lblDbInfo.Text = $"🔌 数据库: {dbConfig.Server} / {dbConfig.Database} ⚠️未确认";
+                    lblDbInfo.ForeColor = Color.FromArgb(251, 191, 36); // 橙色
+                }
             }
             else
             {
@@ -153,7 +198,9 @@ namespace FastHorse
 
         private void UpdateExecuteButtonState()
         {
-            bool canExecute = !string.IsNullOrEmpty(dbConfig.Server) && 
+            // 只有在数据库配置已确认、有配置信息、且有SQL文件时才能执行
+            bool canExecute = isDatabaseConfigConfirmed &&
+                             !string.IsNullOrEmpty(dbConfig.Server) && 
                              !string.IsNullOrEmpty(dbConfig.Database) && 
                              sqlFiles.Count > 0;
             btnExecute.Enabled = canExecute;
@@ -185,9 +232,25 @@ namespace FastHorse
                 dialog.Description = "选择包含SQL脚本的文件夹";
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
+                    // 只有在满足以下条件时，才需要重新确认数据库配置：
+                    // 1. 已经确认过配置（isDatabaseConfigConfirmed = true）
+                    // 2. 之前已经选择过文件夹（selectedFolderPath 不为空）
+                    // 3. 选择了不同的文件夹（路径不同）
+                    if (isDatabaseConfigConfirmed && 
+                        !string.IsNullOrEmpty(selectedFolderPath) && 
+                        selectedFolderPath != dialog.SelectedPath)
+                    {
+                        // 选择了不同的文件夹，需要重新确认数据库配置
+                        isDatabaseConfigConfirmed = false;
+                    }
+                    
                     selectedFolderPath = dialog.SelectedPath;
                     lblFolderPath.Text = $"📁 {selectedFolderPath}";
                     LoadSqlFiles();
+                    
+                    // 更新数据库信息显示和执行按钮状态
+                    UpdateDatabaseInfo();
+                    UpdateExecuteButtonState();
                 }
             }
         }
@@ -196,11 +259,23 @@ namespace FastHorse
         {
             sqlFiles.Clear();
             fileList.Clear();
+            
+            // 清空执行记录
+            executionRecords.Clear();
 
             if (string.IsNullOrEmpty(selectedFolderPath) || !Directory.Exists(selectedFolderPath))
             {
+                // 重置文件列表显示
+                dgvFiles.DataSource = null;
+                dgvFiles.DataSource = fileList;
+                
+                // 重置执行记录显示
+                dgvExecutionLog.DataSource = null;
+                dgvExecutionLog.DataSource = executionRecords;
+                
                 UpdateExecuteButtonState();
                 UpdateFileCount();
+                UpdateExecutionSummary();
                 return;
             }
 
@@ -214,7 +289,16 @@ namespace FastHorse
                     fileList.Add(new SqlFileInfo(file));
                 }
 
+                // 重新绑定数据源，确保显示新加载的文件
+                dgvFiles.DataSource = null;
+                dgvFiles.DataSource = fileList;
+                
+                // 重置执行记录显示
+                dgvExecutionLog.DataSource = null;
+                dgvExecutionLog.DataSource = executionRecords;
+
                 UpdateFileCount();
+                UpdateExecutionSummary();
                 UpdateExecutionStats($"已加载 {sqlFiles.Count} 个脚本文件");
                 MessageBox.Show($"找到 {sqlFiles.Count} 个SQL文件", "加载成功", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -402,9 +486,15 @@ namespace FastHorse
                 {
                     dbConfig = form.Config;
                     SaveDatabaseConfig();
+                    
+                    // 标记数据库配置已确认（本次会话有效）
+                    isDatabaseConfigConfirmed = true;
+                    
+                    // 更新数据库信息显示和执行按钮状态
                     UpdateDatabaseInfo();
                     UpdateExecuteButtonState();
-                    MessageBox.Show("数据库配置已保存", "成功", 
+                    
+                    MessageBox.Show("数据库配置已保存并确认\n执行按钮现已启用", "成功", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -434,7 +524,7 @@ namespace FastHorse
             {
                 Text = "关于 FastHorse",
                 Width = 500,
-                Height = 400,
+                Height = 600,
                 StartPosition = FormStartPosition.CenterParent,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 MinimizeBox = false,
@@ -509,6 +599,7 @@ namespace FastHorse
                        "✓ 详细的错误信息记录\n" +
                        "✓ 支持自定义 SQL 执行选项\n" +
                        "✓ 友好的用户界面和操作体验\n" +
+                       "✓ 支持多线程并发执行\n" +
                        "✓ 完整的执行日志和统计信息\n\n" +
                        "让数据库脚本执行变得简单、快速、可靠！",
                 Font = new Font("Microsoft YaHei UI", 9F),
@@ -518,26 +609,9 @@ namespace FastHorse
                 ReadOnly = true,
                 Location = new Point(30, 190),
                 Width = 420,
-                Height = 130,
+                Height = 330,
                 ScrollBars = RichTextBoxScrollBars.None
-            };
-
-            // 关闭按钮
-            Button btnClose = new Button
-            {
-                Text = "确定",
-                Font = new Font("Microsoft YaHei UI", 9.5F),
-                BackColor = Color.FromArgb(99, 102, 241),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Width = 100,
-                Height = 38,
-                Cursor = Cursors.Hand,
-                Location = new Point(350, 315)
-            };
-            btnClose.FlatAppearance.BorderSize = 0;
-            btnClose.Click += (s, e) => aboutForm.Close();
-            AddHoverEffect(btnClose, Color.FromArgb(79, 70, 229));
+            };           
 
             // 添加控件
             mainPanel.Controls.Add(lblTitle);
@@ -546,7 +620,6 @@ namespace FastHorse
             mainPanel.Controls.Add(divider);
             mainPanel.Controls.Add(lblDescription);
             mainPanel.Controls.Add(txtDescription);
-            mainPanel.Controls.Add(btnClose);
 
             aboutForm.Controls.Add(mainPanel);
             aboutForm.ShowDialog(this);
@@ -554,6 +627,16 @@ namespace FastHorse
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
+            // 双重安全检查：确保数据库配置已确认
+            if (!isDatabaseConfigConfirmed)
+            {
+                MessageBox.Show("⚠️ 安全提醒\n\n为了防止误操作到错误的数据库，每次启动程序都需要先查看并确认数据库配置。\n\n请点击【⚙️ 数据库配置】按钮，确认配置信息后点击【保存】。", 
+                    "需要确认数据库配置", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                return;
+            }
+            
             if (sqlFiles.Count == 0)
             {
                 MessageBox.Show("请先选择包含SQL文件的文件夹", "提示", 
@@ -573,7 +656,8 @@ namespace FastHorse
                                    $"📊 目标数据库信息：\n" +
                                    $"   服务器：{dbConfig.Server}\n" +
                                    $"   数据库：{dbConfig.Database}\n" +
-                                   $"   认证方式：{(dbConfig.IntegratedSecurity ? "Windows 身份验证" : "SQL Server 身份验证")}\n\n" +
+                                   $"   认证方式：{(dbConfig.IntegratedSecurity ? "Windows 身份验证" : "SQL Server 身份验证")}\n" +
+                                   $"   执行模式：{(chkMultiThread.Checked ? "⚡ 多线程并发执行" : "🔄 单线程顺序执行")}\n\n" +
                                    $"⚠️ 请确认数据库信息正确后再执行！";
             
             if (MessageBox.Show(confirmMessage, "确认执行", 
@@ -595,8 +679,133 @@ namespace FastHorse
             // 显示遮罩
             ShowOverlay("正在执行脚本...");
 
-            // 异步执行
-            Task.Run(() => ExecuteScriptsAsync());
+            // 根据多线程开关选择执行方式
+            if (chkMultiThread.Checked)
+            {
+                Task.Run(() => ExecuteScriptsMultiThreadAsync());
+            }
+            else
+            {
+                Task.Run(() => ExecuteScriptsAsync());
+            }
+        }
+
+        private async Task ExecuteScriptsMultiThreadAsync()
+        {
+            string connectionString = dbConfig.GetConnectionString();
+            var stopwatchTotal = Stopwatch.StartNew();
+
+            int totalFiles = sqlFiles.Count;
+            int completedFiles = 0;
+            int successCount = 0;
+            int failCount = 0;
+            object lockObj = new object();
+
+            // 设置最大并发数（根据CPU核心数或者固定值）
+            int maxDegreeOfParallelism = Math.Min(Environment.ProcessorCount, 8);
+            var semaphore = new SemaphoreSlim(maxDegreeOfParallelism);
+
+            // 创建所有任务
+            var tasks = sqlFiles.Select(async filePath =>
+            {
+                await semaphore.WaitAsync();
+                try
+                {
+                    string fileName = Path.GetFileName(filePath);
+                    ExecutionRecord record = new ExecutionRecord
+                    {
+                        FileName = fileName,
+                        Status = "执行中",
+                        DurationText = "..."
+                    };
+
+                    var stopwatch = Stopwatch.StartNew();
+
+                    // 线程安全地添加记录
+                    lock (lockObj)
+                    {
+                        record.StartTime = DateTime.Now;
+                        this.Invoke(new Action(() =>
+                        {
+                            executionRecords.Add(record);
+                            UpdateFileListStatus(fileName, "执行中");
+                        }));
+                    }
+
+                    try
+                    {
+                        string sqlScript = FileEncodingHelper.ReadFileWithEncodingDetection(filePath);
+                        string finalScript = BuildSqlScriptWithOptions(sqlScript);
+                        await ExecuteSqlScriptAsync(connectionString, finalScript);
+
+                        stopwatch.Stop();
+                        lock (lockObj)
+                        {
+                            successCount++;
+                            completedFiles++;
+                            UpdateRecordResult(record, "成功", string.Empty, stopwatch.Elapsed);
+                            
+                            // 更新进度
+                            this.Invoke(new Action(() =>
+                            {
+                                UpdateOverlayProgress(completedFiles, totalFiles, $"已完成 {completedFiles}/{totalFiles}");
+                            }));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        stopwatch.Stop();
+                        string detailedError = BuildDetailedErrorMessage(ex);
+                        lock (lockObj)
+                        {
+                            failCount++;
+                            completedFiles++;
+                            UpdateRecordResult(record, "失败", detailedError, stopwatch.Elapsed);
+                            
+                            // 更新进度
+                            this.Invoke(new Action(() =>
+                            {
+                                UpdateOverlayProgress(completedFiles, totalFiles, $"已完成 {completedFiles}/{totalFiles}");
+                            }));
+                        }
+                    }
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            }).ToList();
+
+            // 等待所有任务完成
+            await Task.WhenAll(tasks);
+
+            stopwatchTotal.Stop();
+
+            // 恢复按钮状态并隐藏遮罩
+            this.Invoke(new Action(() =>
+            {
+                // 隐藏遮罩
+                HideOverlay();
+
+                btnSelectFolder.Enabled = true;
+                btnDbConfig.Enabled = true;
+                UpdateExecuteButtonState();
+                
+                string resultMsg = $"多线程执行完成！\n\n" +
+                    $"总耗时: {stopwatchTotal.Elapsed.TotalSeconds:F2} 秒\n" +
+                    $"并发数: {maxDegreeOfParallelism} 线程\n" +
+                    $"成功: {successCount} 个\n" +
+                    $"失败: {failCount} 个";
+
+                UpdateExecutionStats($"执行完成 - 成功 {successCount} | 失败 {failCount}");
+                
+                // 执行完成后应用筛选
+                FilterExecutionRecords();
+                
+                MessageBox.Show(resultMsg, "执行结果", 
+                    MessageBoxButtons.OK, 
+                    failCount > 0 ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
+            }));
         }
 
         private async Task ExecuteScriptsAsync()
@@ -767,11 +976,6 @@ namespace FastHorse
             FilterExecutionRecords();
         }
 
-        private void chkShowPending_CheckedChanged(object sender, EventArgs e)
-        {
-            FilterExecutionRecords();
-        }
-
         private void txtExecutionSearch_TextChanged(object sender, EventArgs e)
         {
             FilterExecutionRecords();
@@ -783,11 +987,24 @@ namespace FastHorse
             FilterExecutionRecords();
         }
 
+        private void btnShowAll_Click(object sender, EventArgs e)
+        {
+            // 选中所有筛选项
+            chkShowSuccess.Checked = true;
+            chkShowFailed.Checked = true;
+            FilterExecutionRecords();
+            // 同时更新文件列表显示所有文件
+            UpdateFileListFromFilter();
+        }
+
         private void FilterExecutionRecords()
         {
             if (executionRecords.Count == 0)
             {
                 UpdateExecutionSummary();
+                // 执行记录为空时，显示所有文件
+                dgvFiles.DataSource = null;
+                dgvFiles.DataSource = fileList;
                 return;
             }
 
@@ -822,6 +1039,51 @@ namespace FastHorse
             }));
 
             UpdateExecutionSummary();
+            
+            // 联动更新文件列表
+            UpdateFileListFromFilter(filtered);
+        }
+
+        private void UpdateFileListFromFilter(BindingList<ExecutionRecord> filteredRecords = null)
+        {
+            // 如果没有执行记录，显示所有文件
+            if (executionRecords.Count == 0)
+            {
+                dgvFiles.DataSource = null;
+                dgvFiles.DataSource = fileList;
+                return;
+            }
+
+            // 使用传入的筛选结果，如果没有则获取当前数据源
+            var filtered = filteredRecords ?? (dgvExecutionLog.DataSource as BindingList<ExecutionRecord>);
+            
+            if (filtered == null || filtered.Count == 0)
+            {
+                // 如果筛选结果为空，显示空列表
+                dgvFiles.DataSource = new BindingList<SqlFileInfo>();
+                return;
+            }
+
+            // 获取筛选后的文件名集合
+            HashSet<string> filteredFileNames = new HashSet<string>();
+            foreach (var record in filtered)
+            {
+                filteredFileNames.Add(record.FileName);
+            }
+
+            // 创建筛选后的文件列表
+            var filteredFileList = new BindingList<SqlFileInfo>();
+            foreach (var fileInfo in fileList)
+            {
+                if (filteredFileNames.Contains(fileInfo.FileName))
+                {
+                    filteredFileList.Add(fileInfo);
+                }
+            }
+
+            // 重新绑定文件列表
+            dgvFiles.DataSource = null;
+            dgvFiles.DataSource = filteredFileList;
         }
 
         private bool ShouldShowStatusForRecord(string status)
@@ -831,9 +1093,11 @@ namespace FastHorse
                 return true;
             }
 
+            // 移除"进行中"状态的筛选，因为执行过程中不需要筛选
+            // 只在执行完成后筛选成功和失败
             if (status == "执行中" || status == "等待执行")
             {
-                return chkShowPending?.Checked ?? true;
+                return true;  // 始终显示进行中的项
             }
 
             if (status == "成功")

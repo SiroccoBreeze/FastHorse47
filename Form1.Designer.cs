@@ -36,6 +36,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.chkMultiThread = new System.Windows.Forms.CheckBox();
             this.btnAbout = new System.Windows.Forms.Button();
             this.btnExecute = new System.Windows.Forms.Button();
             this.btnSqlOptions = new System.Windows.Forms.Button();
@@ -59,8 +60,8 @@
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colViewDetails = new System.Windows.Forms.DataGridViewButtonColumn();
             this.panelExecutionHeader = new System.Windows.Forms.Panel();
+            this.btnShowAll = new System.Windows.Forms.Button();
             this.btnClearSearch = new System.Windows.Forms.Button();
-            this.chkShowPending = new System.Windows.Forms.CheckBox();
             this.txtExecutionSearch = new System.Windows.Forms.TextBox();
             this.lblExecutionLog = new System.Windows.Forms.Label();
             this.lblSearchKeyword = new System.Windows.Forms.Label();
@@ -99,6 +100,7 @@
             // 
             this.panelTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
             this.panelTop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelTop.Controls.Add(this.chkMultiThread);
             this.panelTop.Controls.Add(this.btnAbout);
             this.panelTop.Controls.Add(this.btnExecute);
             this.panelTop.Controls.Add(this.btnSqlOptions);
@@ -130,6 +132,19 @@
             this.btnAbout.Text = "ℹ️";
             this.btnAbout.UseVisualStyleBackColor = false;
             this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
+            // 
+            // chkMultiThread
+            // 
+            this.chkMultiThread.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkMultiThread.AutoSize = true;
+            this.chkMultiThread.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.chkMultiThread.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+            this.chkMultiThread.Location = new System.Drawing.Point(1165, 15);
+            this.chkMultiThread.Name = "chkMultiThread";
+            this.chkMultiThread.Size = new System.Drawing.Size(120, 24);
+            this.chkMultiThread.TabIndex = 8;
+            this.chkMultiThread.Text = "⚡ 多线程执行";
+            this.chkMultiThread.UseVisualStyleBackColor = true;
             // 
             // btnExecute
             // 
@@ -479,8 +494,8 @@
             // panelExecutionHeader
             // 
             this.panelExecutionHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            this.panelExecutionHeader.Controls.Add(this.btnShowAll);
             this.panelExecutionHeader.Controls.Add(this.btnClearSearch);
-            this.panelExecutionHeader.Controls.Add(this.chkShowPending);
             this.panelExecutionHeader.Controls.Add(this.txtExecutionSearch);
             this.panelExecutionHeader.Controls.Add(this.lblExecutionLog);
             this.panelExecutionHeader.Controls.Add(this.lblSearchKeyword);
@@ -493,6 +508,22 @@
             this.panelExecutionHeader.Padding = new System.Windows.Forms.Padding(15, 10, 15, 10);
             this.panelExecutionHeader.Size = new System.Drawing.Size(1089, 37);
             this.panelExecutionHeader.TabIndex = 0;
+            // 
+            // btnShowAll
+            // 
+            this.btnShowAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(102)))), ((int)(((byte)(241)))));
+            this.btnShowAll.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnShowAll.FlatAppearance.BorderSize = 0;
+            this.btnShowAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowAll.Font = new System.Drawing.Font("Microsoft YaHei UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnShowAll.ForeColor = System.Drawing.Color.White;
+            this.btnShowAll.Location = new System.Drawing.Point(105, 6);
+            this.btnShowAll.Name = "btnShowAll";
+            this.btnShowAll.Size = new System.Drawing.Size(54, 24);
+            this.btnShowAll.TabIndex = 7;
+            this.btnShowAll.Text = "📋 全部";
+            this.btnShowAll.UseVisualStyleBackColor = false;
+            this.btnShowAll.Click += new System.EventHandler(this.btnShowAll_Click);
             // 
             // btnClearSearch
             // 
@@ -510,21 +541,6 @@
             this.btnClearSearch.Text = "清除";
             this.btnClearSearch.UseVisualStyleBackColor = false;
             this.btnClearSearch.Click += new System.EventHandler(this.btnClearSearch_Click);
-            // 
-            // chkShowPending
-            // 
-            this.chkShowPending.AutoSize = true;
-            this.chkShowPending.Checked = true;
-            this.chkShowPending.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowPending.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.chkShowPending.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.chkShowPending.Location = new System.Drawing.Point(105, 7);
-            this.chkShowPending.Name = "chkShowPending";
-            this.chkShowPending.Size = new System.Drawing.Size(101, 24);
-            this.chkShowPending.TabIndex = 0;
-            this.chkShowPending.Text = "⏳ 进行中";
-            this.chkShowPending.UseVisualStyleBackColor = true;
-            this.chkShowPending.CheckedChanged += new System.EventHandler(this.chkShowPending_CheckedChanged);
             // 
             // txtExecutionSearch
             // 
@@ -577,32 +593,42 @@
             // 
             // chkShowFailed
             // 
-            this.chkShowFailed.AutoSize = true;
+            this.chkShowFailed.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkShowFailed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
             this.chkShowFailed.Checked = true;
-            this.chkShowFailed.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowFailed.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.chkShowFailed.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkShowFailed.FlatAppearance.BorderSize = 0;
+            this.chkShowFailed.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.chkShowFailed.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkShowFailed.Font = new System.Drawing.Font("Microsoft YaHei UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.chkShowFailed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.chkShowFailed.Location = new System.Drawing.Point(281, 7);
+            this.chkShowFailed.Location = new System.Drawing.Point(235, 6);
             this.chkShowFailed.Name = "chkShowFailed";
-            this.chkShowFailed.Size = new System.Drawing.Size(77, 24);
+            this.chkShowFailed.Size = new System.Drawing.Size(64, 24);
             this.chkShowFailed.TabIndex = 2;
             this.chkShowFailed.Text = "✗ 失败";
-            this.chkShowFailed.UseVisualStyleBackColor = true;
+            this.chkShowFailed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkShowFailed.UseVisualStyleBackColor = false;
             this.chkShowFailed.CheckedChanged += new System.EventHandler(this.chkShowFailed_CheckedChanged);
             // 
             // chkShowSuccess
             // 
-            this.chkShowSuccess.AutoSize = true;
+            this.chkShowSuccess.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkShowSuccess.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
             this.chkShowSuccess.Checked = true;
-            this.chkShowSuccess.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowSuccess.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.chkShowSuccess.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkShowSuccess.FlatAppearance.BorderSize = 0;
+            this.chkShowSuccess.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(185)))), ((int)(((byte)(129)))));
+            this.chkShowSuccess.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkShowSuccess.Font = new System.Drawing.Font("Microsoft YaHei UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.chkShowSuccess.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.chkShowSuccess.Location = new System.Drawing.Point(204, 9);
+            this.chkShowSuccess.Location = new System.Drawing.Point(165, 6);
             this.chkShowSuccess.Name = "chkShowSuccess";
-            this.chkShowSuccess.Size = new System.Drawing.Size(76, 24);
+            this.chkShowSuccess.Size = new System.Drawing.Size(64, 24);
             this.chkShowSuccess.TabIndex = 1;
             this.chkShowSuccess.Text = "✓ 成功";
-            this.chkShowSuccess.UseVisualStyleBackColor = true;
+            this.chkShowSuccess.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkShowSuccess.UseVisualStyleBackColor = false;
             this.chkShowSuccess.CheckedChanged += new System.EventHandler(this.chkShowSuccess_CheckedChanged);
             // 
             // panelOverlay
@@ -772,6 +798,7 @@
         private System.Windows.Forms.Button btnDbConfig;
         private System.Windows.Forms.Button btnSelectFolder;
         private System.Windows.Forms.Button btnAbout;
+        private System.Windows.Forms.CheckBox chkMultiThread;
         private System.Windows.Forms.Label lblDbInfo;
         private System.Windows.Forms.Label lblFolderPath;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -786,6 +813,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colErrorMessage;
         private System.Windows.Forms.Button btnClearSearch;
+        private System.Windows.Forms.Button btnShowAll;
         private System.Windows.Forms.TextBox txtExecutionSearch;
         private System.Windows.Forms.Label lblSearchKeyword;
         private System.Windows.Forms.Panel panelExecutionHeader;
@@ -797,7 +825,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewButtonColumn colViewDetails;
-        private System.Windows.Forms.CheckBox chkShowPending;
         private System.Windows.Forms.CheckBox chkShowFailed;
         private System.Windows.Forms.CheckBox chkShowSuccess;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFileListName;
