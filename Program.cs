@@ -50,7 +50,21 @@ namespace FastHorse
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            
+            // 显示授权验证窗口
+            using (AuthorizationForm authForm = new AuthorizationForm())
+            {
+                if (authForm.ShowDialog() == DialogResult.OK)
+                {
+                    // 验证成功，启动主程序
+                    Application.Run(new Form1());
+                }
+                else
+                {
+                    // 验证失败或取消，退出程序
+                    Application.Exit();
+                }
+            }
         }
     }
 }
