@@ -161,7 +161,7 @@ namespace FastHorse
             else
             {
                 // 验证失败
-                MessageBox.Show("授权码错误，请重试或联系 6835", "验证失败", 
+                MessageBox.Show("授权码错误，请重试或联系 6835", "验证失败",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtAuthCode.Text = "";
                 txtAuthCode.Focus();

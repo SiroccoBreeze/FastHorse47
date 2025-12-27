@@ -96,7 +96,7 @@ namespace FastHorse
                 // 绘制可见的行号 - 使用 RichTextBox 的实际行位置
                 int lineNumber = firstLineIndex + 1;
                 int maxVisibleLine = Math.Min(textBox.Lines.Length, firstLineIndex + 100); // 限制绘制范围
-                
+
                 for (int i = firstLineIndex; i < maxVisibleLine; i++)
                 {
                     try
@@ -104,10 +104,10 @@ namespace FastHorse
                         // 获取当前行的第一个字符索引
                         int lineCharIndex = textBox.GetFirstCharIndexFromLine(i);
                         if (lineCharIndex < 0) break;
-                        
+
                         // 获取该字符在控件中的位置
                         Point linePos = textBox.GetPositionFromCharIndex(lineCharIndex);
-                        
+
                         // 如果行已经不可见，停止绘制
                         if (linePos.Y >= textBox.Height) break;
                         if (linePos.Y < 0)
@@ -115,16 +115,16 @@ namespace FastHorse
                             lineNumber++;
                             continue;
                         }
-                        
+
                         string lineNumberText = lineNumber.ToString();
-                        
+
                         // 右对齐行号
                         SizeF textSize = e.Graphics.MeasureString(lineNumberText, font);
                         float x = lineNumberPanel.Width - textSize.Width - 10;
-                        
+
                         // 绘制行号 - Y 坐标与代码行完全一致
                         e.Graphics.DrawString(lineNumberText, font, brush, x, linePos.Y);
-                        
+
                         lineNumber++;
                     }
                     catch

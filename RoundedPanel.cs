@@ -1,4 +1,3 @@
-using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -43,16 +42,16 @@ namespace FastHorse
 
         public RoundedPanel()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint | 
-                     ControlStyles.UserPaint | 
-                     ControlStyles.DoubleBuffer | 
+            SetStyle(ControlStyles.AllPaintingInWmPaint |
+                     ControlStyles.UserPaint |
+                     ControlStyles.DoubleBuffer |
                      ControlStyles.ResizeRedraw, true);
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            
+
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 
 namespace FastHorse
@@ -55,7 +54,7 @@ namespace FastHorse
             {
                 if (string.IsNullOrEmpty(ExecutionStatus))
                     return FileName;
-                
+
                 switch (ExecutionStatus)
                 {
                     case "成功":

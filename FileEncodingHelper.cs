@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 using Ude;
@@ -41,7 +40,7 @@ namespace FastHorse
                     try
                     {
                         string charsetName = detector.Charset.ToUpperInvariant();
-                        
+
                         // 映射常见的编码名称
                         switch (charsetName)
                         {

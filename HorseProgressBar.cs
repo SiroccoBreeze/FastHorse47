@@ -31,7 +31,7 @@ namespace FastHorse
         {
             this.DoubleBuffered = true;
             this.SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
-            
+
             // 初始化动画定时器
             animationTimer = new Timer();
             animationTimer.Interval = 80; // 80ms 切换一次动画帧，更流畅
@@ -84,7 +84,7 @@ namespace FastHorse
         {
             // 切换动画帧
             animationFrame = (animationFrame + 1) % horseFrames.Length;
-            
+
             // 重绘控件
             this.Invalidate();
         }
@@ -92,7 +92,7 @@ namespace FastHorse
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            
+
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
@@ -117,7 +117,7 @@ namespace FastHorse
             if (progress > 0)
             {
                 int progressWidth = (int)(this.Width * (progress / 100.0));
-                
+
                 // 主渐变色
                 using (LinearGradientBrush progressBrush = new LinearGradientBrush(
                     new Rectangle(0, 0, progressWidth, this.Height),
@@ -127,7 +127,7 @@ namespace FastHorse
                 {
                     g.FillRoundedRectangle(progressBrush, 0, 0, progressWidth, this.Height, 10);
                 }
-                
+
                 // 添加高光效果
                 using (LinearGradientBrush highlightBrush = new LinearGradientBrush(
                     new Rectangle(0, 0, progressWidth, this.Height / 2),
@@ -155,7 +155,7 @@ namespace FastHorse
                     int progressWidth = (int)(this.Width * (progress / 100.0));
                     float horseX = Math.Max(8, progressWidth - 35); // 马在进度条末端
                     float horseY = (this.Height - 32) / 2 - 2; // 稍微向上偏移
-                    
+
                     // 绘制外发光效果（更大范围）
                     using (SolidBrush outerGlowBrush = new SolidBrush(Color.FromArgb(40, 255, 215, 0)))
                     {
@@ -170,7 +170,7 @@ namespace FastHorse
                             }
                         }
                     }
-                    
+
                     // 绘制内发光效果
                     using (SolidBrush innerGlowBrush = new SolidBrush(Color.FromArgb(120, 255, 215, 0)))
                     {
@@ -179,13 +179,13 @@ namespace FastHorse
                         g.DrawString(currentHorse, horseFont, innerGlowBrush, horseX - 1, horseY + 1);
                         g.DrawString(currentHorse, horseFont, innerGlowBrush, horseX + 1, horseY + 1);
                     }
-                    
+
                     // 添加阴影效果
                     using (SolidBrush shadowBrush = new SolidBrush(Color.FromArgb(80, 0, 0, 0)))
                     {
                         g.DrawString(currentHorse, horseFont, shadowBrush, horseX + 2, horseY + 3);
                     }
-                    
+
                     // 绘制马 - 使用金色
                     using (SolidBrush horseBrush = new SolidBrush(Color.FromArgb(255, 193, 7)))
                     {
@@ -202,7 +202,7 @@ namespace FastHorse
                     SizeF textSize = g.MeasureString(progressText, textFont);
                     float textX = (this.Width - textSize.Width) / 2;
                     float textY = (this.Height - textSize.Height) / 2;
-                    
+
                     // 文本外描边
                     using (SolidBrush outlineBrush = new SolidBrush(Color.FromArgb(150, 0, 0, 0)))
                     {
@@ -211,7 +211,7 @@ namespace FastHorse
                         g.DrawString(progressText, textFont, outlineBrush, textX, textY - 1);
                         g.DrawString(progressText, textFont, outlineBrush, textX, textY + 1);
                     }
-                    
+
                     // 文本主体 - 白色
                     using (SolidBrush textBrush = new SolidBrush(Color.White))
                     {
@@ -225,7 +225,7 @@ namespace FastHorse
             {
                 g.DrawRoundedRectangle(borderPen, 1, 1, this.Width - 2, this.Height - 2, 10);
             }
-            
+
             // 绘制内阴影效果
             using (Pen innerShadowPen = new Pen(Color.FromArgb(30, 0, 0, 0), 1))
             {
@@ -269,13 +269,13 @@ namespace FastHorse
         {
             GraphicsPath path = new GraphicsPath();
             float diameter = radius * 2;
-            
+
             path.AddArc(x, y, diameter, diameter, 180, 90);
             path.AddArc(x + width - diameter, y, diameter, diameter, 270, 90);
             path.AddArc(x + width - diameter, y + height - diameter, diameter, diameter, 0, 90);
             path.AddArc(x, y + height - diameter, diameter, diameter, 90, 90);
             path.CloseFigure();
-            
+
             return path;
         }
     }

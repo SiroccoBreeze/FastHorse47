@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FastHorse
@@ -50,7 +47,7 @@ namespace FastHorse
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
+
             // 显示授权验证窗口
             using (AuthorizationForm authForm = new AuthorizationForm())
             {

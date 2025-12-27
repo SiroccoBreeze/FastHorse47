@@ -1,8 +1,8 @@
 using System;
+using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 
 namespace FastHorse
 {
@@ -21,7 +21,7 @@ namespace FastHorse
             builder.DataSource = Server;
             builder.InitialCatalog = Database;
             builder.ConnectTimeout = ConnectionTimeout;
-            
+
             // 跳过SSL证书验证，解决证书链不受信任的问题
             builder.TrustServerCertificate = true;
             // 启用加密连接
