@@ -42,7 +42,7 @@ namespace FastHorse
             // 标题
             lblTitle = new Label
             {
-                Text = "⚡ FastHorse 授权验证",
+                Text = "⚡ FastHorse",
                 Font = new Font("Microsoft YaHei UI", 16F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(99, 102, 241),
                 AutoSize = true,
@@ -62,7 +62,7 @@ namespace FastHorse
             // 提示信息
             lblPrompt = new Label
             {
-                Text = "请输入今日授权码:",
+                Text = "请输入授权码:",
                 Font = new Font("Microsoft YaHei UI", 10F),
                 ForeColor = Color.FromArgb(71, 85, 105),
                 AutoSize = true,
