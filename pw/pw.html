@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日代码生成器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #2575fc, #6a11cb);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .date-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .date-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .date-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .date-value {
+            font-size: 2rem;
+            color: #2575fc;
+            font-weight: 700;
+        }
+        
+        .code-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .code-title {
+            font-size: 1.2rem;
+            color: #495057;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .code-display {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #6a11cb;
+            letter-spacing: 10px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 10px;
+            border-radius: 10px;
+            text-shadow: 0 5px 15px rgba(106, 17, 203, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #2575fc, #6a11cb);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 117, 252, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: #495057;
+            border: 2px solid #e9ecef;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            transform: translateY(-3px);
+        }
+        
+        .info-section {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .info-title {
+            font-size: 1.2rem;
+            color: #495057;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-text {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .algorithm-details {
+            background-color: white;
+            border-left: 4px solid #2575fc;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #495057;
+            overflow-x: auto;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .highlight {
+            color: #2575fc;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .date-display {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .code-display {
+                font-size: 3rem;
+                letter-spacing: 5px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-code"></i>
+                每日代码生成器
+            </h1>
+            <p>基于当前日期生成唯一的6位数字代码</p>
+        </div>
+        
+        <div class="content">
+            <div class="date-display">
+                <div class="date-item">
+                    <div class="date-label">年份</div>
+                    <div id="year" class="date-value">2023</div>
+                </div>
+                <div class="date-item">
+                    <div class="date-label">月份</div>
+                    <div id="month" class="date-value">12</div>
+                </div>
+                <div class="date-item">
+                    <div class="date-label">日期</div>
+                    <div id="day" class="date-value">31</div>
+                </div>
+            </div>
+            
+            <div class="code-section">
+                <div class="code-title">今日生成的代码</div>
+                <div id="code" class="code-display">000000</div>
+                <div class="button-container">
+                    <button id="generateBtn" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i>
+                        生成今日代码
+                    </button>
+                    <button id="copyBtn" class="btn btn-secondary">
+                        <i class="far fa-copy"></i>
+                        复制代码
+                    </button>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-title">
+                    <i class="fas fa-info-circle"></i>
+                    算法说明
+                </div>
+                <div class="info-text">
+                    此代码生成器基于当前日期使用特定算法生成唯一的6位数字代码。每日的代码都会不同，但同一天内生成的代码始终保持一致。
+                </div>
+                <div class="info-text">
+                    算法基于Python原始代码移植，使用日期生成种子，然后通过固定密钥进行混淆，确保输出为6位数字。
+                </div>
+                
+                <div class="algorithm-details">
+                    <div># 算法步骤:</div>
+                    <div>1. 获取当前日期: year, month, day</div>
+                    <div>2. 计算种子: seed = year * 10001 + month * 100 + day</div>
+                    <div>3. 调整种子: seed = (seed * 31) % 1000000</div>
+                    <div>4. 使用密钥混淆: seed = (seed ^ 6835) % 1000000</div>
+                    <div>5. 格式化为6位数字: f"{seed:06d}"</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>基于日期生成代码 | 每日自动更新 | 代码: <span class="highlight" id="update-time">--:--:--</span></p>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const yearElement = document.getElementById('year');
+        const monthElement = document.getElementById('month');
+        const dayElement = document.getElementById('day');
+        const codeElement = document.getElementById('code');
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const updateTimeElement = document.getElementById('update-time');
+        
+        // 生成今日代码的函数 (移植自Python代码)
+        function generateTodayCode() {
+            // 获取当前日期
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1; // JavaScript月份从0开始
+            const day = today.getDate();
+            
+            // 更新日期显示
+            yearElement.textContent = year;
+            monthElement.textContent = month.toString().padStart(2, '0');
+            dayElement.textContent = day.toString().padStart(2, '0');
+            
+            // 使用日期生成种子
+            let seed = year * 10001 + month * 100 + day;
+            seed = (seed * 31) % 1000000; // 确保是6位数
+            
+            // 使用固定密钥进行混淆
+            const secretKey = 6835;
+            seed = (seed ^ secretKey) % 1000000;
+            
+            // 确保生成6位数字
+            return seed.toString().padStart(6, '0');
+        }
+        
+        // 更新页面显示
+        function updatePage() {
+            const code = generateTodayCode();
+            codeElement.textContent = code;
+            
+            // 更新时间显示
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            updateTimeElement.textContent = timeString;
+        }
+        
+        // 复制代码到剪贴板
+        function copyCodeToClipboard() {
+            const code = codeElement.textContent;
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    // 更改按钮文本和图标
+                    const originalHTML = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+                    copyBtn.classList.add('btn-primary');
+                    copyBtn.classList.remove('btn-secondary');
+                    
+                    // 3秒后恢复原始状态
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalHTML;
+                        copyBtn.classList.remove('btn-primary');
+                        copyBtn.classList.add('btn-secondary');
+                    }, 3000);
+                })
+                .catch(err => {
+                    console.error('复制失败: ', err);
+                    alert('复制失败，请手动复制代码');
+                });
+        }
+        
+        // 添加事件监听器
+        generateBtn.addEventListener('click', updatePage);
+        copyBtn.addEventListener('click', copyCodeToClipboard);
+        
+        // 初始加载
+        updatePage();
+        
+        // 每分钟更新一次显示时间
+        setInterval(() => {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            updateTimeElement.textContent = timeString;
+        }, 1000);
+        
+        // 每日午夜更新代码
+        function scheduleMidnightUpdate() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 1, 0); // 设置为明天00:00:01
+            
+            const timeUntilMidnight = tomorrow.getTime() - now.getTime();
+            
+            // 在午夜后1秒更新页面
+            setTimeout(() => {
+                updatePage();
+                scheduleMidnightUpdate(); // 重新调度下一次更新
+            }, timeUntilMidnight);
+        }
+        
+        // 启动午夜更新调度
+        scheduleMidnightUpdate();
+    </script>
+</body>
+</html>
